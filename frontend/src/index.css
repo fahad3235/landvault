@@ -22,8 +22,17 @@
   100% { background-position: 400px 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #eef2ec 25%, #f7faf6 50%, #eef2ec 75%);
+  background: linear-gradient(90deg, #eef1ee 25%, #f7f9f7 50%, #eef1ee 75%);
   background-size: 800px 100%;
   animation: shimmer 1.4s infinite linear;
-  border-radius: 10px;
+  border-radius: 8px;
+}
+
+/* thin scrollbars for wide tables */
+.gov-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.gov-scroll::-webkit-scrollbar-thumb {
+  background: #d0d5dd;
+  border-radius: 8px;
 }

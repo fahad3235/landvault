@@ -6,9 +6,9 @@ export default function VerifyPage() {
   const { t } = useLang();
   const [params] = useSearchParams();
   return (
-    <div className="max-w-[1120px] mx-auto px-5 py-8">
-      <div className="bg-white border border-line rounded-2xl shadow-[0_8px_28px_rgba(20,45,32,0.08)] p-6">
-        <h2 className="text-xl font-bold">{t('ver_h')}</h2>
+    <div className="max-w-[1200px] mx-auto px-4 py-8">
+      <div className="bg-white border border-line rounded-lg shadow-gov p-5 md:p-6">
+        <h2 className="text-[1.3rem] font-bold text-ink">{t('ver_h')}</h2>
         <p className="text-muted text-[0.93rem] mb-4">{t('ver_p')}</p>
         <Verifier
           key={params.get('deed') || 'blank'}

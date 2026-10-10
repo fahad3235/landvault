@@ -1,16 +1,20 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../lib/i18n.jsx';
 import { useMode } from '../lib/api.js';
+import { gt } from './govtext.js';
 
-export function LogoMark({ size = 38 }) {
+// Official-style circular emblem: green ring, gold star, shield check.
+export function Emblem({ size = 52 }) {
   return (
-    <span
-      className="rounded-[10px] flex items-center justify-center flex-none"
-      style={{ width: size, height: size, background: 'linear-gradient(135deg,#0E6B4A,#0A4A34)' }}
-    >
-      <svg width={size * 0.58} height={size * 0.58} viewBox="0 0 24 24" fill="none" stroke="#FFD84D" strokeWidth="2">
-        <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
-        <path d="M9 12l2 2 4-4" />
+    <span className="flex-none" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox="0 0 56 56" fill="none" aria-hidden="true">
+        <circle cx="28" cy="28" r="26" stroke="#006A4E" strokeWidth="3" />
+        <circle cx="28" cy="28" r="21.5" stroke="#B7791F" strokeWidth="1.4" />
+        <path
+          d="M28 13l3.1 6.3 6.9 1-5 4.9 1.2 6.8L28 28.7l-6.2 3.3 1.2-6.8-5-4.9 6.9-1L28 13z"
+          fill="#B7791F"
+        />
+        <path d="M23.5 36.5l3 3 6-6" stroke="#006A4E" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
   );
@@ -19,50 +23,62 @@ export function LogoMark({ size = 38 }) {
 export default function Header() {
   const { lang, setLang, t } = useLang();
   const mode = useMode();
+  const g = (k) => gt(lang, k);
   const linkCls = ({ isActive }) =>
-    `px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
-      isActive ? 'bg-em-soft text-em-deep' : 'text-muted hover:bg-em-soft hover:text-em-deep'
+    `px-3 py-2 text-[0.95rem] font-semibold transition border-b-2 ${
+      isActive ? 'text-gov-deep border-gov' : 'text-ink border-transparent hover:text-gov-deep'
     }`;
+  const deadCls = 'px-3 py-2 text-[0.95rem] font-semibold text-muted cursor-default select-none';
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
-      <div className="max-w-[1120px] mx-auto px-5 flex items-center gap-3 py-3">
-        <Link to="/" className="flex items-center gap-2.5">
-          <LogoMark />
+    <header className="sticky top-0 z-50 bg-white shadow-gov">
+      {/* slim tricolor utility strip */}
+      <div className="flex h-[6px]" aria-hidden="true">
+        <div className="flex-[2] bg-gov" />
+        <div className="flex-[1] bg-white border-y border-line" />
+        <div className="flex-[2] bg-accent" />
+      </div>
+      <div className="max-w-[1200px] mx-auto px-4 flex items-center gap-3 py-2.5">
+        <Link to="/" className="flex items-center gap-3">
+          <Emblem />
           <span>
-            <b className="text-[1.15rem] tracking-wide block leading-none">LandVault</b>
-            <small className="text-[0.68rem] text-muted font-semibold tracking-[1.4px] uppercase">{t('tagline')}</small>
+            <b className="text-[1.6rem] leading-none block text-ink tracking-tight">LandVault</b>
+            <small className="text-[0.95rem] text-ink font-semibold block leading-tight">{t('tagline')}</small>
           </span>
         </Link>
-        <nav className="hidden md:flex gap-1 ml-2">
+        <nav className="hidden lg:flex gap-0.5 ml-6 items-center">
           <NavLink to="/" end className={linkCls}>{t('nav_home')}</NavLink>
+          <NavLink to="/" className={() => linkCls({ isActive: false })}>{g('nav_search')}</NavLink>
           <NavLink to="/verify" className={linkCls}>{t('nav_verify')}</NavLink>
-          <NavLink to="/methodology" className={linkCls}>{t('nav_how')}</NavLink>
+          <span className={deadCls} title={g('nav_services')}>{g('nav_services')}</span>
+          <NavLink to="/methodology" className={linkCls}>{g('nav_help')}</NavLink>
+          <span className={deadCls} title={g('nav_contact')}>{g('nav_contact')}</span>
         </nav>
-        <div className="ml-auto flex items-center gap-2.5">
-          <span className="bg-[#3A2E0A] text-[#FFD84D] text-[0.7rem] font-extrabold tracking-[1.2px] px-3 py-1.5 rounded-full uppercase whitespace-nowrap">
-            {t('demobadge')}
-          </span>
+        <div className="ml-auto flex items-center gap-2">
           {mode === 'offline' && (
             <span
               title={t('offline_note')}
-              className="hidden sm:inline-flex items-center gap-1.5 text-[0.72rem] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-full whitespace-nowrap"
+              className="hidden md:inline-flex items-center gap-1.5 text-[0.72rem] font-bold text-[#93370D] bg-[#FEF6E7] border border-[#F5D9A8] px-2.5 py-1.5 rounded-full whitespace-nowrap"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B7791F] inline-block" />
               {t('offline_note')}
             </span>
           )}
-          <div className="flex border border-line rounded-full overflow-hidden flex-none">
+          <span className="hidden sm:inline-block bg-ink text-white text-[0.68rem] font-extrabold tracking-[1.2px] px-3 py-1.5 rounded-full uppercase whitespace-nowrap">
+            {t('demobadge')}
+          </span>
+          <div className="flex border border-line rounded-lg overflow-hidden flex-none bg-white">
             <button
               onClick={() => setLang('en')}
-              className={`px-3 py-1.5 text-xs font-bold transition ${lang === 'en' ? 'bg-em text-white' : 'bg-white text-muted'}`}
+              className={`px-3 py-1.5 text-[0.8rem] font-bold transition ${lang === 'en' ? 'bg-gov text-white' : 'text-muted hover:bg-panel'}`}
             >
               EN
             </button>
+            <span className="w-px bg-line" />
             <button
               onClick={() => setLang('bn')}
-              className={`px-3 py-1.5 text-xs font-bold transition ${lang === 'bn' ? 'bg-em text-white' : 'bg-white text-muted'}`}
+              className={`px-3 py-1.5 text-[0.8rem] font-bold transition ${lang === 'bn' ? 'bg-gov text-white' : 'text-muted hover:bg-panel'}`}
             >
-              বাং
+              বাংলা
             </button>
           </div>
         </div>

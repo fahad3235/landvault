@@ -9,45 +9,53 @@ const BANDS = [
   { tier: 'high', range: '60–89', desc: 'd_high' },
   { tier: 'crit', range: '90–100', desc: 'd_crit' },
 ];
-const SEV_BAR = { bad: '#E0483A', warn: '#E0A020' };
+const SEV_BAR = { bad: '#F42A41', warn: '#B7791F' };
+
+const card = 'bg-white border border-line rounded-lg shadow-gov p-5 md:p-6 mb-5';
+const h2 = 'text-[1.2rem] font-bold text-ink';
 
 export default function Methodology() {
   const { t } = useLang();
   return (
-    <div className="max-w-[1120px] mx-auto px-5 py-8">
-      <div className="bg-white border border-line rounded-2xl shadow-[0_8px_28px_rgba(20,45,32,0.08)] p-6 mb-5">
-        <h2 className="text-xl font-bold">{t('m_h')}</h2>
+    <div className="max-w-[1200px] mx-auto px-4 py-8">
+      <div className={card}>
+        <h2 className="text-[1.3rem] font-bold text-ink">{t('m_h')}</h2>
         <p className="text-muted text-[0.93rem] mt-1">{t('m_p')}</p>
       </div>
 
-      <div className="bg-white border border-line rounded-2xl shadow-[0_8px_28px_rgba(20,45,32,0.08)] p-6 mb-5">
-        <h2 className="text-xl font-bold">{t('m_signals_h')}</h2>
-        <div className="grid gap-3 sm:grid-cols-2 mt-3.5">
-          {SIGNAL_ORDER.map((key) => {
+      <div className={card}>
+        <h2 className={h2}>{t('m_signals_h')}</h2>
+        <ol className="grid gap-3 sm:grid-cols-2 mt-3.5 list-none">
+          {SIGNAL_ORDER.map((key, i) => {
             const meta = SIGNAL_META[key];
             return (
-              <div
+              <li
                 key={key}
-                className="border border-line rounded-[10px] px-4 py-3.5 bg-white"
-                style={{ borderLeft: `5px solid ${SEV_BAR[meta.cls]}` }}
+                className="border border-line rounded-md px-4 py-3.5 bg-white flex gap-3"
+                style={{ borderLeft: `4px solid ${SEV_BAR[meta.cls]}` }}
               >
-                <span className="float-right font-extrabold text-[0.95rem] tnum text-ink">+{W[key]}</span>
-                <h4 className="text-[0.95rem] font-bold mb-1 pr-12">{t(meta.tk)}</h4>
-                <p className="text-[0.83rem] text-muted">{t(meta.pk)}</p>
-              </div>
+                <span className="w-7 h-7 rounded-full bg-gov text-white font-extrabold flex-none flex items-center justify-center text-[0.85rem]">
+                  {i + 1}
+                </span>
+                <div>
+                  <span className="float-right font-extrabold text-[0.95rem] tnum text-ink ml-2">+{W[key]}</span>
+                  <h4 className="text-[0.95rem] font-bold mb-1 text-ink">{t(meta.tk)}</h4>
+                  <p className="text-[0.83rem] text-muted">{t(meta.pk)}</p>
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ol>
         <p className="text-[0.83rem] text-muted mt-3">
           Score = min(100, Σ weights)
         </p>
       </div>
 
-      <div className="bg-white border border-line rounded-2xl shadow-[0_8px_28px_rgba(20,45,32,0.08)] p-6 mb-5">
-        <h2 className="text-xl font-bold">{t('m_tiers_h')}</h2>
+      <div className={card}>
+        <h2 className={h2}>{t('m_tiers_h')}</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-3.5">
           {BANDS.map((b) => (
-            <div key={b.tier} className="border border-line rounded-xl p-4">
+            <div key={b.tier} className="border border-line rounded-lg p-4 bg-white">
               <TierBadge tier={b.tier}>{t('ov_' + b.tier)}</TierBadge>
               <div className="text-2xl font-extrabold tnum mt-2" style={{ color: TIER_COLORS[b.tier] }}>
                 {b.range}
@@ -58,10 +66,10 @@ export default function Methodology() {
         </div>
       </div>
 
-      <div className="bg-white border border-line rounded-2xl shadow-[0_8px_28px_rgba(20,45,32,0.08)] p-6">
-        <h2 className="text-xl font-bold">{t('m_honesty_h')}</h2>
+      <div className={card}>
+        <h2 className={h2}>{t('m_honesty_h')}</h2>
         <div
-          className="bg-[#FFF8E6] border border-dashed border-gold rounded-xl px-4 py-4 text-[0.85rem] text-[#6B5A1E] mt-3"
+          className="bg-panel border border-dashed border-line rounded-lg px-4 py-3.5 text-[0.84rem] text-muted mt-3"
           dangerouslySetInnerHTML={{ __html: t('disc') }}
         />
       </div>
