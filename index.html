@@ -359,7 +359,7 @@ function setLang(l){ LANG=l; localStorage.setItem("lv-lang",l);
   document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); });
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder = t(el.getAttribute("data-i18n-ph")); });
   if(!document.getElementById("view-dossier").classList.contains("hidden") && LAST_PLOT) renderDossier(LAST_PLOT);
-  if(LAST_Q && document.getElementById("resultsBlock").style.display!=="none") doSearch(true);
+  if((LAST_Q||BROWSE_MODE) && !TIER_FILTER && document.getElementById("resultsBlock").style.display!=="none") doSearch(true);
 }
 
 /* ============ SYNTHETIC REGISTRY — 12 curated showcase plots (all fictional) ============ */
@@ -518,16 +518,24 @@ function doSearch(silent){
   const q=(silent?LAST_Q:inp.value).trim().toLowerCase();
   LAST_Q=q;
   if(!silent&&TIER_FILTER){TIER_FILTER=null;renderOverview();}
-  const box=document.getElementById("resultsBlock"), grid=document.getElementById("results");
-  if(!q){ box.style.display="none"; return; }
+  const box=document.getElementById("resultsBlock"), grid=document.getElementById("results"),
+        sub=document.querySelector("#resultsBlock .sub");
+  BROWSE_MODE=!q;
+  box.style.display="block";
+  if(!q){
+    const shown=PLOTS.slice(0,24);
+    sub.textContent=t("browse_count").replace("{a}",shown.length).replace("{b}",PLOTS.length);
+    grid.innerHTML=shown.map(plotCard).join("");
+    box.scrollIntoView({behavior:"smooth",block:"nearest"});
+    return;
+  }
   const hits=PLOTS.filter(p=>{
     const hay=[p.id,p.dag,p.khatian,p.owner,p.mouza,p.upazila,p.district,p.type]
       .concat(p.chain.map(c=>c.kh)).concat(p.docs.map(d=>d.ref)).join(" ").toLowerCase();
     return q.split(/\s+/).every(tok=>hay.includes(tok));
   });
-  box.style.display="block";
   const shown=hits.slice(0,24);
-  document.querySelector("#resultsBlock .sub").textContent=t("res_count").replace("{a}",shown.length).replace("{b}",hits.length);
+  sub.textContent=t("res_count").replace("{a}",shown.length).replace("{b}",hits.length);
   grid.innerHTML = hits.length ? shown.map(plotCard).join("") : `<p class="note">${t("nores")}</p>`;
   box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
@@ -605,9 +613,9 @@ function verifyDeed(){
     : `<b>${t("ver_no_t")}</b><p style="margin-top:6px">${t("ver_no_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)}<br>${t("ver_hash")} (registry): <span class="hash">${esc(rec.hash)}</span></span></p>`;
 }
 /* ============ REGISTRY OVERVIEW ============ */
-Object.assign(I18N.en,{res_count:"Showing {a} of {b} matching plots — click any plot to open its dossier.",tier_count:"Showing {a} of {b} {t}-risk plots — click any plot to open its dossier.",ov_h:"Registry overview",ov_p:"Risk distribution across the full synthetic registry — tap a tier to inspect its plots",ov_low:"Low",ov_med:"Medium",ov_high:"High",ov_crit:"Critical",ov_total:"total plots"});
-Object.assign(I18N.bn,{res_count:"{b}টি মিলে যাওয়া প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",tier_count:"{t} ঝুঁকির {b}টি প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",ov_h:"রেজিস্ট্রি সারসংক্ষেপ",ov_p:"সম্পূর্ণ সিনথেটিক রেজিস্ট্রিতে ঝুঁকির বিন্যাস — প্লট দেখতে যেকোনো স্তরে ট্যাপ করুন",ov_low:"কম",ov_med:"মাঝারি",ov_high:"উচ্চ",ov_crit:"গুরুতর",ov_total:"মোট প্লট"});
-let TIER_FILTER=null;
+Object.assign(I18N.en,{res_count:"Showing {a} of {b} matching plots — click any plot to open its dossier.",browse_count:"Browsing the registry — showing {a} of {b} plots. Type above to refine, or tap a tier chip.",tier_count:"Showing {a} of {b} {t}-risk plots — click any plot to open its dossier.",ov_h:"Registry overview",ov_p:"Risk distribution across the full synthetic registry — tap a tier to inspect its plots",ov_low:"Low",ov_med:"Medium",ov_high:"High",ov_crit:"Critical",ov_total:"total plots"});
+Object.assign(I18N.bn,{res_count:"{b}টি মিলে যাওয়া প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",browse_count:"রেজিস্ট্রি ব্রাউজ করছেন — {b}টি প্লটের মধ্যে {a}টি দেখানো হচ্ছে। নির্দিষ্ট করতে উপরে লিখুন অথবা স্তরে ট্যাপ করুন।",tier_count:"{t} ঝুঁকির {b}টি প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",ov_h:"রেজিস্ট্রি সারসংক্ষেপ",ov_p:"সম্পূর্ণ সিনথেটিক রেজিস্ট্রিতে ঝুঁকির বিন্যাস — প্লট দেখতে যেকোনো স্তরে ট্যাপ করুন",ov_low:"কম",ov_med:"মাঝারি",ov_high:"উচ্চ",ov_crit:"গুরুতর",ov_total:"মোট প্লট"});
+let TIER_FILTER=null, BROWSE_MODE=false;
 function plotCard(p){
   const a=assess(p);
   return `<div class="plot" onclick="openPlot('${p.id}')">
@@ -642,7 +650,7 @@ function filterTier(k){
   box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 const _setLang=setLang;
-setLang=function(l){ _setLang(l); renderOverview(); };
+setLang=function(l){ _setLang(l); renderOverview(); if(TIER_FILTER){const k=TIER_FILTER;TIER_FILTER=null;filterTier(k);} };
 /* ============ INIT ============ */
 document.getElementById("st-plots").textContent = PLOTS.length;
 setLang(LANG);
