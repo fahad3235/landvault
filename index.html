@@ -359,8 +359,8 @@ function setLang(l){ LANG=l; localStorage.setItem("lv-lang",l);
   if(LAST_Q && document.getElementById("resultsBlock").style.display!=="none") doSearch(true);
 }
 
-/* ============ SYNTHETIC REGISTRY (demo data — all fictional) ============ */
-const PLOTS = [
+/* ============ SYNTHETIC REGISTRY — 12 curated showcase plots (all fictional) ============ */
+const CURATED = [
 {id:"SV-001",district:"Dhaka",upazila:"Savar",mouza:"Birulia",dag:"142",khatian:"RS-881",area:12.5,type:"Residential",owner:"Karim Uddin",
  chain:[{s:"CS",kh:"CS-112",owner:"Hazi Delwar Hossain",yr:1921},{s:"SA",kh:"SA-340",owner:"Delwar Hossain",yr:1958},{s:"RS",kh:"RS-881",owner:"Karim Uddin",yr:1989},{s:"BS",kh:"BS-2077",owner:"Karim Uddin",yr:2013}],
  sales:[{date:"1989-03-14",deed:"DL-1989-00312",seller:"Delwar Hossain (heirs)",buyer:"Karim Uddin",amount:850000,reg:true,mut:true},{date:"2013-06-02",deed:"—",seller:"—",buyer:"—",amount:0,reg:true,mut:true,note:"BS record update"}],
@@ -425,6 +425,60 @@ const PLOTS = [
  docs:[{type:"Khatian (RS)",ref:"RS-900",hash:"8192a3b4c5d6",ok:true},{type:"Deed",ref:"DL-1999-05440",hash:"e2f3a4b5c6d7",ok:true}],
  flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null}
 ];
+/* ============ PROCEDURAL REGISTRY — 988 seeded plots (deterministic, synthetic) ============ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var GEO=[["Dhaka",["Savar","Dhamrai","Keraniganj"]],["Gazipur",["Kaliakair","Sreepur","Kapasia"]],["Narayanganj",["Rupganj","Araihazar","Sonargaon"]],["Cumilla",["Daudkandi","Chandina","Debidwar"]],["Chattogram",["Sitakunda","Mirsharai","Hathazari"]],["Tangail",["Mirzapur","Kalihati","Ghatail"]],["Mymensingh",["Trishal","Bhaluka","Muktagachha"]],["Sylhet",["Golapganj","Beanibazar","Zakiganj"]],["Rajshahi",["Paba","Mohanpur","Bagmara"]],["Khulna",["Dumuria","Batiaghata","Paikgachha"]],["Barishal",["Bakerganj","Mehendiganj","Banaripara"]],["Rangpur",["Mithapukur","Gangachara","Kaunia"]],["Bogura",["Shajahanpur","Sherpur","Gabtali"]],["Jashore",["Jhikargachha","Chaugachha","Bagherpara"]],["Cox's Bazar",["Ukhiya","Teknaf","Chakaria"]]];
+var MOUZAS=["Birulia","Tetuljhora","Dhamsona","Chandra","Sutrapur","Gouripur","Barabkunda","Aminbazar","Hemayetpur","Konda","Barmi","Jangalia","Duptara","Braid","Shilmandi","Dulalpur","Padua","Barura","Pahartali","Kumira","Bhatiari","Gorai","Bashail","Delduar","Churkhai","Dapunia","Khadimnagar","Tuker Bazar","Mogla Bazar","Naogaon","Taherpur","Durgapur","Chuknagar","Gutudia","Kashipur","Lalmohan","Haragachh","Pirganj","Kahalu","Nandigram","Bagharpara","Manirampur","Whykong","Hnila","Dulahazara","Jhilim","Charpara","Baluchar","Dhakkinpara"];
+var FN=["Karim","Rahim","Abdul","Mohammad","Nasir","Belal","Anwar","Mofizur","Rafiqul","Jalal","Delwar","Kashem","Aziz","Fazlu","Taleb","Nurul","Rashed","Jabbar","Mannan","Shahidul","Kamrul","Ariful","Mahmudul","Saiful","Tanvir","Rakib","Sakib","Imran","Faruk","Harun","Yusuf","Ibrahim","Ismail","Abul","Shamsul","Najmul","Ferdous","Mamun","Rahima","Nasrin","Fatema","Salma","Shahana","Rina","Parvin","Sharmin","Ruma","Dipa","Mitu","Poly","Shilpi","Nusrat","Tania","Mousumi","Lima","Asma","Kohinur","Dilruba","Rehana"];
+var LN=["Uddin","Hossain","Rahman","Ahmed","Khan","Sheikh","Miah","Ali","Islam","Chowdhury","Talukder","Sarkar","Mandal","Biswas","Das","Roy","Mollah","Gazi","Mridha","Hawlader","Pramanik","Sarder","Kazi","Munshi","Bhuyan","Majumder","Shikder","Matubbar","Khandaker","Dewan","Molla","Fakir","Akanda","Bhuiyan"];
+var PTYPES=["Residential","Agricultural","Commercial","Industrial","Orchard"];
+function rpick(R,arr){return arr[Math.floor(R()*arr.length)];}
+function rhex(R,n){var s="",c="0123456789abcdef";for(var i=0;i<n;i++)s+=c[Math.floor(R()*16)];return s;}
+function rname(R){return rpick(R,FN)+" "+rpick(R,LN);}
+function generateRegistry(n,seed){
+  var R=mulberry32(seed), out=[], deedSeq=30000;
+  for(var i=0;i<n;i++){
+    var g=rpick(R,GEO), district=g[0], upazila=rpick(R,g[1]), mouza=rpick(R,MOUZAS);
+    var dag=String(1+Math.floor(R()*880));
+    var type=rpick(R,PTYPES), area=Math.round((3+R()*37)*4)/4;
+    var isKhas=R()<0.025, owner=isKhas?"\u2014":rname(R);
+    var surveys=["CS","SA","RS","BS"], chain=[], co=rname(R);
+    for(var si=0;si<4;si++){
+      if(si>0&&R()<0.22) co=rname(R);
+      chain.push({s:surveys[si],kh:surveys[si]+"-"+(100+Math.floor(R()*900)),owner:co,yr:[1920+Math.floor(R()*8),1955+Math.floor(R()*8),1988+Math.floor(R()*8),2010+Math.floor(R()*12)][si]});
+    }
+    chain[3].owner=owner;
+    var sales=[], docs=[{type:"Khatian (RS)",ref:chain[2].kh,hash:rhex(R,12),ok:true}];
+    if(!isKhas){
+      var ns=1+Math.floor(R()*2.4), prevOwner=chain[0].owner, prevY=1985+Math.floor(R()*10);
+      for(var k=0;k<ns;k++){
+        var y=Math.min(2026,prevY+Math.floor(R()*9)), m=1+Math.floor(R()*12), d=1+Math.floor(R()*28);
+        var date=y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+        var buyer=(k===ns-1)?owner:rname(R), deed="DL-"+y+"-"+(deedSeq++);
+        var amount=Math.round(area*(type==="Commercial"?950000:type==="Industrial"?700000:type==="Residential"?450000:180000)*(0.7+R()*0.8));
+        var reg=R()<0.94;
+        sales.push({date:date,deed:deed,seller:prevOwner,buyer:buyer,amount:amount,reg:reg,mut:reg?(R()<0.88):false});
+        docs.push({type:"Deed",ref:deed,hash:rhex(R,12),ok:true});
+        prevOwner=buyer; prevY=y;
+      }
+    }
+    var flags={case:false,khas:isKhas,acq:false}, doubleSale=null, chainBreak=null;
+    if(!isKhas&&sales.length&&R()<0.07){
+      var s0=sales[0], dd=new Date(s0.date); dd.setDate(dd.getDate()+30+Math.floor(R()*300));
+      var date2=dd.toISOString().slice(0,10), deed2="DL-"+date2.slice(0,4)+"-"+(deedSeq++), buyer2=rname(R);
+      doubleSale={deedA:s0.deed,buyerA:s0.buyer,dateA:s0.date,deedB:deed2,buyerB:buyer2,dateB:date2};
+      sales.push({date:date2,deed:deed2,seller:s0.seller,buyer:buyer2,amount:s0.amount,reg:true,mut:R()<0.4});
+      docs.push({type:"Deed",ref:deed2,hash:rhex(R,12),ok:true});
+    }
+    if(!isKhas&&docs.length>1&&R()<0.05){var tdd=docs[docs.length-1];tdd.ok=false;tdd.hash="REGISTRY:"+tdd.hash+" / PAPER:"+tdd.hash.slice(0,-1)+(tdd.hash.slice(-1)==="a"?"b":"a");}
+    if(R()<0.06){chainBreak={between:"SA \u2192 RS",detail:"SA owner \u201C"+chain[1].owner+"\u201D does not connect to RS owner \u201C"+chain[2].owner+"\u201D \u2014 no transfer or succession record bridges the gap."};}
+    if(R()<0.08)flags.case=true;
+    if(R()<0.035)flags.acq=true;
+    out.push({id:"LV-"+String(i+1).padStart(4,"0"),district:district,upazila:upazila,mouza:mouza,dag:dag,khatian:chain[2].kh,area:area,type:type,owner:owner,chain:chain,sales:sales,docs:docs,flags:flags,doubleSale:doubleSale,chainBreak:chainBreak});
+  }
+  return out;
+}
+const PLOTS = CURATED.concat(generateRegistry(988, 20261005));
 const DEED_INDEX = {};
 PLOTS.forEach(p=>p.docs.forEach(d=>{ if(d.type==="Deed"){ const h=d.hash.startsWith("REGISTRY:")?d.hash.split("/")[0].replace("REGISTRY:","").trim():d.hash; DEED_INDEX[d.ref]={plot:p.id,hash:h,ok:d.ok}; }}));
 
@@ -466,7 +520,9 @@ function doSearch(silent){
     return q.split(/\s+/).every(tok=>hay.includes(tok));
   });
   box.style.display="block";
-  grid.innerHTML = hits.length ? hits.map(p=>{
+  const shown=hits.slice(0,24);
+  document.querySelector("#resultsBlock .sub").textContent=t("res_count").replace("{a}",shown.length).replace("{b}",hits.length);
+  grid.innerHTML = hits.length ? shown.map(p=>{
     const a=assess(p);
     return `<div class="plot" onclick="openPlot('${p.id}')">
       <div class="pid">${p.id}</div><h3>${t("d_mouza")}: ${esc(p.mouza)} · ${t("d_dag")} ${esc(p.dag)}</h3>
@@ -549,6 +605,23 @@ function verifyDeed(){
     ? `<b>${t("ver_ok_t")}</b><p style="margin-top:6px">${t("ver_ok_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)} · ${t("col_hash")}: <span class="hash">${esc(rec.hash)}</span></span></p>`
     : `<b>${t("ver_no_t")}</b><p style="margin-top:6px">${t("ver_no_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)}<br>${t("ver_hash")} (registry): <span class="hash">${esc(rec.hash)}</span></span></p>`;
 }
+/* ============ REGISTRY OVERVIEW ============ */
+Object.assign(I18N.en,{res_count:"Showing {a} of {b} matching plots — click any plot to open its dossier.",ov_h:"Registry overview",ov_p:"Risk distribution across the full synthetic registry",ov_low:"Low",ov_med:"Medium",ov_high:"High",ov_crit:"Critical",ov_total:"total plots"});
+Object.assign(I18N.bn,{res_count:"{b}টি মিলে যাওয়া প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",ov_h:"রেজিস্ট্রি সারসংক্ষেপ",ov_p:"সম্পূর্ণ সিনথেটিক রেজিস্ট্রিতে ঝুঁকির বিন্যাস",ov_low:"কম",ov_med:"মাঝারি",ov_high:"উচ্চ",ov_crit:"গুরুতর",ov_total:"মোট প্লট"});
+function renderOverview(){
+  const counts={low:0,med:0,high:0,crit:0};
+  for(let i=0;i<PLOTS.length;i++) counts[assess(PLOTS[i]).tier]++;
+  const total=PLOTS.length;
+  const cols={low:"#2FA36B",med:"#E0A020",high:"#E06A1B",crit:"#E0483A"};
+  const bar=["low","med","high","crit"].map(k=>{const pc=(counts[k]/total*100);return pc>0?'<span title="'+k+": "+counts[k]+'" style="display:block;height:100%;width:'+pc.toFixed(1)+"%;background:"+cols[k]+'"></span>':"";}).join("");
+  const chips=["low","med","high","crit"].map(k=>'<span style="font-size:.85rem"><span class="tier '+TIER_CLS[k]+'">'+t("ov_"+k)+'</span> <b class="num">'+counts[k]+"</b></span>").join("");
+  const html='<section class="block"><div class="card"><h2>'+t("ov_h")+'</h2><p class="sub">'+t("ov_p")+' · <b class="num">'+total+"</b> "+t("ov_total")+'</p><div style="display:flex;height:16px;border-radius:999px;overflow:hidden;background:#EDF1EC">'+bar+'</div><div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px">'+chips+"</div></div></section>";
+  const old=document.getElementById("ovCard");
+  if(old){ old.outerHTML=html.replace('<div class="card">','<div class="card" id="ovCard">'); }
+  else { document.querySelector(".hero").insertAdjacentHTML("afterend", html.replace('<div class="card">','<div class="card" id="ovCard">')); }
+}
+const _setLang=setLang;
+setLang=function(l){ _setLang(l); renderOverview(); };
 /* ============ INIT ============ */
 document.getElementById("st-plots").textContent = PLOTS.length;
 setLang(LANG);
