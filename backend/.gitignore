@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+landvault.db
+node_modules/
+dist/
+.env
