@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink antialiased;
+    font-family: "Segoe UI", "Hind Siliguri", system-ui, -apple-system, Roboto, "Noto Sans Bengali", sans-serif;
+    line-height: 1.55;
+    margin: 0;
+  }
+}
+
+/* tabular numerals for scores, areas, dates */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* shimmer skeleton for loading states */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #eef2ec 25%, #f7faf6 50%, #eef2ec 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 10px;
+}
