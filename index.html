@@ -356,7 +356,7 @@ function setLang(l){ LANG=l; localStorage.setItem("lv-lang",l);
   document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); });
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder = t(el.getAttribute("data-i18n-ph")); });
   if(!document.getElementById("view-dossier").classList.contains("hidden") && LAST_PLOT) renderDossier(LAST_PLOT);
-  else if(!document.getElementById("resultsBlock").style.display || document.getElementById("resultsBlock").style.display!=="none"){ /* re-run */ if(LAST_Q) doSearch(true); }
+  if(LAST_Q && document.getElementById("resultsBlock").style.display!=="none") doSearch(true);
 }
 
 /* ============ SYNTHETIC REGISTRY (demo data — all fictional) ============ */
@@ -500,7 +500,7 @@ function renderDossier(p){
     <td>${s.reg?`<span class="pill ${s.mut?"p-ok":"p-warn"}">${s.mut?t("st_done"):t("st_pend")}</span>`:`<span class="pill p-info">Record</span>`}</td></tr>`).join("")
     : `<tr><td colspan="6" class="note">—</td></tr>`;
   const docRows = p.docs.map(d=>`<tr><td>${esc(d.type)}</td><td>${esc(d.ref)}</td><td><span class="hash">${esc(d.hash.length>26?d.hash.slice(0,26)+"…":d.hash)}</span></td>
-    <td><span class="pill ${d.ok?"p-ok":"p-bad"}">${d.ok?t("v_ok"):t("v_bad")}</span>${d.type==="Deed"?` <a href="#" onclick="prefillVerify('${d.ref}');return false" style="font-size:.78rem;font-weight:700;color:var(--em)">${t("verify_this")} →</a>`:""}</td></tr>`).join("");
+    <td><span class="pill ${d.ok?"p-ok":"p-bad"}">${d.ok?t("v_ok"):t("v_bad")}</span>${d.type==="Deed"?` <a href="#" onclick="prefillVerify('${d.ref}');return false" style="font-size:.78rem;font-weight:700;color:var(--em);white-space:nowrap">${t("verify_this")} →</a>`:""}</td></tr>`).join("");
   const checks = a.sigs.length ? a.sigs.map(s=>`<li>${t(s.ck)}</li>`).join("") : `<li>${t("c_none")}</li>`;
   document.getElementById("dossier").innerHTML = `
     <div class="dossier-head">
