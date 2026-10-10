@@ -478,7 +478,9 @@ function generateRegistry(n,seed){
   }
   return out;
 }
-const PLOTS = CURATED.concat(generateRegistry(988, 20261005));
+GEO.push(["Dinajpur",["Birampur","Parbatipur","Chirirbandar"]],["Pabna",["Ishwardi","Bera","Sujanagar"]],["Kushtia",["Kumarkhali","Mirpur","Bheramara"]],["Noakhali",["Begumganj","Senbagh","Chatkhil"]],["Chandpur",["Hajiganj","Matlab","Kachua"]],["Munshiganj",["Sreenagar","Sirajdikhan","Gazaria"]],["Narsingdi",["Palash","Shibpur","Belabo"]],["Kishoreganj",["Bhairab","Kuliarchar","Pakundia"]],["Netrokona",["Durgapur","Kalmakanda","Barhatta"]],["Gaibandha",["Gobindaganj","Sundarganj","Sadullapur"]],["Naogaon",["Badalgachhi","Mahadebpur","Patnitala"]],["Sirajganj",["Ullapara","Shahjadpur","Belkuchi"]],["Satkhira",["Kalaroa","Tala","Debhata"]],["Bagerhat",["Morrelganj","Rampal","Fakirhat"]],["Bhola",["Borhanuddin","Lalmohan","Char Fasson"]],["Faridpur",["Bhanga","Boalmari","Alfadanga"]],["Sunamganj",["Chhatak","Derai","Jagannathpur"]],["Moulvibazar",["Sreemangal","Kulaura","Barlekha"]]);
+MOUZAS.push("Durgapur","Kalmakanda","Barhatta","Gobindaganj","Sundarganj","Badalgachhi","Mahadebpur","Ullapara","Shahjadpur","Kalaroa","Tala","Morrelganj","Rampal","Borhanuddin","Bhanga","Boalmari","Chhatak","Derai","Sreemangal","Kulaura","Birampur","Parbatipur","Ishwardi","Bera","Kumarkhali","Begumganj","Senbagh","Hajiganj","Matlab","Sreenagar","Sirajdikhan","Palash","Shibpur","Bhairab","Kuliarchar","Dhakapara","Uttarpara","Majhpara","Purbapara","Chakpara");
+const PLOTS = CURATED.concat(generateRegistry(9988, 20261005));
 const DEED_INDEX = {};
 PLOTS.forEach(p=>p.docs.forEach(d=>{ if(d.type==="Deed"){ const h=d.hash.startsWith("REGISTRY:")?d.hash.split("/")[0].replace("REGISTRY:","").trim():d.hash; DEED_INDEX[d.ref]={plot:p.id,hash:h,ok:d.ok}; }}));
 
