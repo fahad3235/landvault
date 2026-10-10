@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: landvault
+      POSTGRES_PASSWORD: landvault
+      POSTGRES_DB: landvault
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U landvault"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://landvault:landvault@db:5432/landvault
+    depends_on:
+      db:
+        condition: service_healthy
+    # The app also runs wait_for_db() on startup, so it tolerates db restarts.
+
+volumes:
+  pgdata:

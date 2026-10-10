@@ -1,0 +1,8 @@
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
+sqlalchemy==2.1.1
+pydantic==2.13.5
+pytest==9.1.1
+httpx==0.28.1
+# PostgreSQL driver (only needed when DATABASE_URL points at Postgres, e.g. docker-compose)
+psycopg2-binary==2.9.10

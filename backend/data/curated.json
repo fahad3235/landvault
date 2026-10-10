@@ -1,0 +1,873 @@
+[
+ {
+  "id": "SV-001",
+  "district": "Dhaka",
+  "upazila": "Savar",
+  "mouza": "Birulia",
+  "dag": "142",
+  "khatian": "RS-881",
+  "area": 12.5,
+  "type": "Residential",
+  "owner": "Karim Uddin",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-112",
+    "owner": "Hazi Delwar Hossain",
+    "yr": 1921
+   },
+   {
+    "s": "SA",
+    "kh": "SA-340",
+    "owner": "Delwar Hossain",
+    "yr": 1958
+   },
+   {
+    "s": "RS",
+    "kh": "RS-881",
+    "owner": "Karim Uddin",
+    "yr": 1989
+   },
+   {
+    "s": "BS",
+    "kh": "BS-2077",
+    "owner": "Karim Uddin",
+    "yr": 2013
+   }
+  ],
+  "sales": [
+   {
+    "date": "1989-03-14",
+    "deed": "DL-1989-00312",
+    "seller": "Delwar Hossain (heirs)",
+    "buyer": "Karim Uddin",
+    "amount": 850000,
+    "reg": true,
+    "mut": true
+   },
+   {
+    "date": "2013-06-02",
+    "deed": "—",
+    "seller": "—",
+    "buyer": "—",
+    "amount": 0,
+    "reg": true,
+    "mut": true,
+    "note": "BS record update"
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-881",
+    "hash": "c41d90ab12ef",
+    "ok": true
+   },
+   {
+    "type": "Khatian (BS)",
+    "ref": "BS-2077",
+    "hash": "77b2e10cd944",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-1989-00312",
+    "hash": "9f2c41be07d3",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-002",
+  "district": "Dhaka",
+  "upazila": "Savar",
+  "mouza": "Birulia",
+  "dag": "143",
+  "khatian": "RS-882",
+  "area": 8,
+  "type": "Residential",
+  "owner": "Rahima Begum",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-113",
+    "owner": "Hazi Delwar Hossain",
+    "yr": 1921
+   },
+   {
+    "s": "SA",
+    "kh": "SA-341",
+    "owner": "Delwar Hossain",
+    "yr": 1958
+   },
+   {
+    "s": "RS",
+    "kh": "RS-882",
+    "owner": "Rahima Begum",
+    "yr": 1994
+   },
+   {
+    "s": "BS",
+    "kh": "BS-2078",
+    "owner": "Rahima Begum",
+    "yr": 2013
+   }
+  ],
+  "sales": [
+   {
+    "date": "1994-11-20",
+    "deed": "DL-1994-07881",
+    "seller": "Delwar Hossain (heirs)",
+    "buyer": "Rahima Begum",
+    "amount": 620000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-882",
+    "hash": "a0b91cc437d1",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-1994-07881",
+    "hash": "51de883a0bc2",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": true,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-003",
+  "district": "Dhaka",
+  "upazila": "Savar",
+  "mouza": "Tetuljhora",
+  "dag": "88",
+  "khatian": "RS-410",
+  "area": 22,
+  "type": "Commercial",
+  "owner": "Anwar Hossain",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-071",
+    "owner": "Jabbar Sheikh",
+    "yr": 1922
+   },
+   {
+    "s": "SA",
+    "kh": "SA-198",
+    "owner": "Jabbar Sheikh",
+    "yr": 1957
+   },
+   {
+    "s": "RS",
+    "kh": "RS-410",
+    "owner": "Mofizur Rahman",
+    "yr": 1990
+   },
+   {
+    "s": "BS",
+    "kh": "BS-1190",
+    "owner": "Anwar Hossain",
+    "yr": 2025
+   }
+  ],
+  "sales": [
+   {
+    "date": "2024-12-05",
+    "deed": "DL-2024-11802",
+    "seller": "Mofizur Rahman",
+    "buyer": "Belal Sheikh",
+    "amount": 12500000,
+    "reg": true,
+    "mut": true
+   },
+   {
+    "date": "2025-08-19",
+    "deed": "DL-2025-14409",
+    "seller": "Belal Sheikh",
+    "buyer": "Anwar Hossain",
+    "amount": 16900000,
+    "reg": true,
+    "mut": false
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-410",
+    "hash": "e7c204af91b3",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2024-11802",
+    "hash": "9f2c41be07d3",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2025-14409",
+    "hash": "3bd0771c9e50",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-004",
+  "district": "Dhaka",
+  "upazila": "Savar",
+  "mouza": "Dhamsona",
+  "dag": "210",
+  "khatian": "RS-655",
+  "area": 15.75,
+  "type": "Agricultural",
+  "owner": "Mofizur Rahman",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-203",
+    "owner": "Kashem Ali",
+    "yr": 1920
+   },
+   {
+    "s": "SA",
+    "kh": "SA-512",
+    "owner": "Kashem Ali",
+    "yr": 1959
+   },
+   {
+    "s": "RS",
+    "kh": "RS-655",
+    "owner": "Mofizur Rahman",
+    "yr": 1991
+   },
+   {
+    "s": "BS",
+    "kh": "BS-1602",
+    "owner": "Mofizur Rahman",
+    "yr": 2014
+   }
+  ],
+  "sales": [
+   {
+    "date": "2023-05-30",
+    "deed": "DL-2023-09177",
+    "seller": "Kashem Ali (heirs)",
+    "buyer": "Mofizur Rahman",
+    "amount": 4800000,
+    "reg": true,
+    "mut": false
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-655",
+    "hash": "f28a13de60c7",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2023-09177",
+    "hash": "aa10c4d2f836",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-005",
+  "district": "Gazipur",
+  "upazila": "Kaliakair",
+  "mouza": "Chandra",
+  "dag": "41",
+  "khatian": "RS-302",
+  "area": 30,
+  "type": "Industrial",
+  "owner": "Rafiqul Islam",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-045",
+    "owner": "Nurul Haque",
+    "yr": 1923
+   },
+   {
+    "s": "SA",
+    "kh": "SA-120",
+    "owner": "Nurul Haque",
+    "yr": 1956
+   },
+   {
+    "s": "RS",
+    "kh": "RS-302",
+    "owner": "Shahana Parvin",
+    "yr": 1992
+   },
+   {
+    "s": "BS",
+    "kh": "BS-0881",
+    "owner": "Rafiqul Islam",
+    "yr": 2024
+   }
+  ],
+  "sales": [
+   {
+    "date": "2024-02-11",
+    "deed": "DL-2024-03110",
+    "seller": "Shahana Parvin",
+    "buyer": "Rafiqul Islam",
+    "amount": 21000000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-302",
+    "hash": "12cd88f0a4b9",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2024-03110",
+    "hash": "d4e5f607182a",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-006",
+  "district": "Gazipur",
+  "upazila": "Kaliakair",
+  "mouza": "Chandra",
+  "dag": "42",
+  "khatian": "RS-303",
+  "area": 18.25,
+  "type": "Residential",
+  "owner": "Salma Akter",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-046",
+    "owner": "Nurul Haque",
+    "yr": 1923
+   },
+   {
+    "s": "SA",
+    "kh": "SA-121",
+    "owner": "Nurul Haque",
+    "yr": 1956
+   },
+   {
+    "s": "RS",
+    "kh": "RS-303",
+    "owner": "Salma Akter",
+    "yr": 1995
+   },
+   {
+    "s": "BS",
+    "kh": "BS-0882",
+    "owner": "Salma Akter",
+    "yr": 2015
+   }
+  ],
+  "sales": [
+   {
+    "date": "1995-09-17",
+    "deed": "DL-1995-06602",
+    "seller": "Nurul Haque (heirs)",
+    "buyer": "Salma Akter",
+    "amount": 1500000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-303",
+    "hash": "88f1c2d3e405",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-1995-06602",
+    "hash": "REGISTRY:6b70aa19c2d4 / PAPER:6b70aa19c2e4",
+    "ok": false
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-007",
+  "district": "Gazipur",
+  "upazila": "Kaliakair",
+  "mouza": "Sutrapur",
+  "dag": "19",
+  "khatian": "RS-118",
+  "area": 25.5,
+  "type": "Commercial",
+  "owner": "Belal Sheikh",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-090",
+    "owner": "Aziz Master",
+    "yr": 1921
+   },
+   {
+    "s": "SA",
+    "kh": "SA-240",
+    "owner": "Aziz Master",
+    "yr": 1958
+   },
+   {
+    "s": "RS",
+    "kh": "RS-118",
+    "owner": "Fatema Khatun",
+    "yr": 1993
+   },
+   {
+    "s": "BS",
+    "kh": "BS-0450",
+    "owner": "Belal Sheikh",
+    "yr": 2025
+   }
+  ],
+  "sales": [
+   {
+    "date": "2024-06-14",
+    "deed": "DL-2024-07731",
+    "seller": "Fatema Khatun",
+    "buyer": "Belal Sheikh",
+    "amount": 14200000,
+    "reg": true,
+    "mut": true
+   },
+   {
+    "date": "2025-02-02",
+    "deed": "DL-2025-01208",
+    "seller": "Fatema Khatun",
+    "buyer": "Nasrin Akter",
+    "amount": 13800000,
+    "reg": true,
+    "mut": false
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-118",
+    "hash": "0be451a9d8f3",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2024-07731",
+    "hash": "c7d21e90ab44",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2025-01208",
+    "hash": "f90b3c17de62",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": true,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": {
+   "deedA": "DL-2024-07731",
+   "buyerA": "Belal Sheikh",
+   "dateA": "2024-06-14",
+   "deedB": "DL-2025-01208",
+   "buyerB": "Nasrin Akter",
+   "dateB": "2025-02-02"
+  },
+  "chainBreak": null
+ },
+ {
+  "id": "SV-008",
+  "district": "Cumilla",
+  "upazila": "Daudkandi",
+  "mouza": "Gouripur",
+  "dag": "512",
+  "khatian": "RS-720",
+  "area": 11,
+  "type": "Residential",
+  "owner": "Nasrin Akter",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-310",
+    "owner": "Taleb Ali",
+    "yr": 1924
+   },
+   {
+    "s": "SA",
+    "kh": "SA-700",
+    "owner": "Taleb Ali",
+    "yr": 1955
+   },
+   {
+    "s": "RS",
+    "kh": "RS-720",
+    "owner": "Taleb Ali (heirs)",
+    "yr": 1990
+   },
+   {
+    "s": "BS",
+    "kh": "BS-1905",
+    "owner": "Nasrin Akter",
+    "yr": 2016
+   }
+  ],
+  "sales": [
+   {
+    "date": "2016-01-25",
+    "deed": "DL-2016-00871",
+    "seller": "Jalal Uddin",
+    "buyer": "Nasrin Akter",
+    "amount": 3200000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-720",
+    "hash": "4d5e6f708192",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2016-00871",
+    "hash": "b8c9d0e1f2a3",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": {
+   "between": "RS → BS",
+   "detail": "RS khatian records owner “Taleb Ali (heirs)”, but the 2016 deed seller is “Jalal Uddin” with no succession link on record."
+  }
+ },
+ {
+  "id": "SV-009",
+  "district": "Cumilla",
+  "upazila": "Daudkandi",
+  "mouza": "Gouripur",
+  "dag": "513",
+  "khatian": "RS-721",
+  "area": 9.5,
+  "type": "Residential",
+  "owner": "Shahana Parvin",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-311",
+    "owner": "Taleb Ali",
+    "yr": 1924
+   },
+   {
+    "s": "SA",
+    "kh": "SA-701",
+    "owner": "Taleb Ali",
+    "yr": 1955
+   },
+   {
+    "s": "RS",
+    "kh": "RS-721",
+    "owner": "Rashed Khan",
+    "yr": 1991
+   },
+   {
+    "s": "BS",
+    "kh": "BS-1906",
+    "owner": "Shahana Parvin",
+    "yr": 2022
+   }
+  ],
+  "sales": [
+   {
+    "date": "2022-10-08",
+    "deed": "DL-2022-10543",
+    "seller": "Rashed Khan",
+    "buyer": "Shahana Parvin",
+    "amount": 5100000,
+    "reg": true,
+    "mut": false
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-721",
+    "hash": "5e6f708192a3",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-2022-10543",
+    "hash": "REGISTRY:1a2b3c4d5e6f / PAPER:1a2b3c4d5e70",
+    "ok": false
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": {
+   "between": "SA → RS",
+   "detail": "SA owner “Taleb Ali” does not connect to RS owner “Rashed Khan” — no transfer or succession record bridges the gap."
+  }
+ },
+ {
+  "id": "SV-010",
+  "district": "Chattogram",
+  "upazila": "Sitakunda",
+  "mouza": "Barabkunda",
+  "dag": "77",
+  "khatian": "RS-090",
+  "area": 40,
+  "type": "Agricultural",
+  "owner": "—",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-008",
+    "owner": "— (khas)",
+    "yr": 1922
+   },
+   {
+    "s": "SA",
+    "kh": "SA-022",
+    "owner": "— (khas)",
+    "yr": 1957
+   },
+   {
+    "s": "RS",
+    "kh": "RS-090",
+    "owner": "— (khas)",
+    "yr": 1992
+   },
+   {
+    "s": "BS",
+    "kh": "BS-0311",
+    "owner": "— (khas)",
+    "yr": 2018
+   }
+  ],
+  "sales": [],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-090",
+    "hash": "6f708192a3b4",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": true,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-011",
+  "district": "Chattogram",
+  "upazila": "Sitakunda",
+  "mouza": "Barabkunda",
+  "dag": "78",
+  "khatian": "RS-091",
+  "area": 14,
+  "type": "Residential",
+  "owner": "Abdul Malek",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-009",
+    "owner": "Fazlu Miah",
+    "yr": 1922
+   },
+   {
+    "s": "SA",
+    "kh": "SA-023",
+    "owner": "Fazlu Miah",
+    "yr": 1957
+   },
+   {
+    "s": "RS",
+    "kh": "RS-091",
+    "owner": "Abdul Malek",
+    "yr": 1996
+   },
+   {
+    "s": "BS",
+    "kh": "BS-0312",
+    "owner": "Abdul Malek",
+    "yr": 2018
+   }
+  ],
+  "sales": [
+   {
+    "date": "1996-04-02",
+    "deed": "DL-1996-02114",
+    "seller": "Fazlu Miah (heirs)",
+    "buyer": "Abdul Malek",
+    "amount": 980000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-091",
+    "hash": "708192a3b4c5",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-1996-02114",
+    "hash": "d1e2f3a4b5c6",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": true,
+   "khas": false,
+   "acq": true
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ },
+ {
+  "id": "SV-012",
+  "district": "Dhaka",
+  "upazila": "Savar",
+  "mouza": "Birulia",
+  "dag": "160",
+  "khatian": "RS-900",
+  "area": 6.75,
+  "type": "Residential",
+  "owner": "Fatema Khatun",
+  "chain": [
+   {
+    "s": "CS",
+    "kh": "CS-114",
+    "owner": "Hazi Delwar Hossain",
+    "yr": 1921
+   },
+   {
+    "s": "SA",
+    "kh": "SA-342",
+    "owner": "Delwar Hossain",
+    "yr": 1958
+   },
+   {
+    "s": "RS",
+    "kh": "RS-900",
+    "owner": "Fatema Khatun",
+    "yr": 1999
+   },
+   {
+    "s": "BS",
+    "kh": "BS-2091",
+    "owner": "Fatema Khatun",
+    "yr": 2013
+   }
+  ],
+  "sales": [
+   {
+    "date": "1999-07-19",
+    "deed": "DL-1999-05440",
+    "seller": "Delwar Hossain (heirs)",
+    "buyer": "Fatema Khatun",
+    "amount": 540000,
+    "reg": true,
+    "mut": true
+   }
+  ],
+  "docs": [
+   {
+    "type": "Khatian (RS)",
+    "ref": "RS-900",
+    "hash": "8192a3b4c5d6",
+    "ok": true
+   },
+   {
+    "type": "Deed",
+    "ref": "DL-1999-05440",
+    "hash": "e2f3a4b5c6d7",
+    "ok": true
+   }
+  ],
+  "flags": {
+   "case": false,
+   "khas": false,
+   "acq": false
+  },
+  "doubleSale": null,
+  "chainBreak": null
+ }
+]
