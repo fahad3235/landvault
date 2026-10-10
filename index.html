@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LandVault — Verify Before You Buy Land</title>
+<meta name="description" content="LandVault: citizen land-record verification for Bangladesh. Ownership chains, deed verification and fraud-risk scoring. SYNTHETIC DEMO DATA.">
+<style>
+:root{
+  --bg:#F6F8F4; --card:#FFFFFF; --ink:#17281F; --muted:#5D6D63; --line:#E3E9E2;
+  --em:#0E6B4A; --em-deep:#0A4A34; --em-soft:#E4F2EA;
+  --gold:#C9A227; --gold-soft:#FAF3DF;
+  --red:#BE3A2B; --red-soft:#FBEDEA;
+  --amber:#9A6B14; --amber-soft:#FBF3DF;
+  --blue:#1D5FBF; --blue-soft:#E9F1FD;
+  --radius:14px; --shadow:0 8px 28px rgba(20,45,32,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Hind Siliguri",system-ui,-apple-system,Roboto,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.num,.score-num,td{font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+/* header */
+header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:14px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--em),var(--em-deep));display:flex;align-items:center;justify-content:center;flex:none}
+.logo b{font-size:1.15rem;letter-spacing:.2px}
+.logo small{display:block;font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:1.4px;text-transform:uppercase}
+nav.main{display:flex;gap:4px;margin-left:8px}
+nav.main a{padding:8px 14px;border-radius:9px;color:var(--muted);text-decoration:none;font-weight:600;font-size:.92rem}
+nav.main a:hover,nav.main a.on{background:var(--em-soft);color:var(--em-deep)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.badge-demo{background:#3A2E0A;color:#FFD84D;font-size:.7rem;font-weight:800;letter-spacing:1.2px;padding:6px 12px;border-radius:999px;text-transform:uppercase}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:#fff;padding:7px 13px;font-weight:700;font-size:.8rem;color:var(--muted);cursor:pointer}
+.lang button.on{background:var(--em);color:#fff}
+/* hero */
+.hero{background:linear-gradient(160deg,#0A4A34 0%,#0E6B4A 60%,#12805A 100%);color:#fff;border-radius:22px;margin:26px 0 0;padding:52px 40px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero::after{content:"";position:absolute;right:-70px;top:-70px;width:340px;height:340px;border:46px solid rgba(255,255,255,.07);border-radius:50%}
+.hero::before{content:"";position:absolute;right:60px;bottom:-110px;width:220px;height:220px;border:30px solid rgba(201,162,39,.16);border-radius:50%}
+.hero h1{font-size:2.35rem;line-height:1.18;max-width:640px;position:relative;z-index:1}
+.hero h1 .hl{color:#FFD84D}
+.hero p{margin:14px 0 24px;max-width:600px;color:#DCEBE2;position:relative;z-index:1;font-size:1.03rem}
+.searchbar{display:flex;gap:10px;max-width:640px;position:relative;z-index:1;background:#fff;border-radius:14px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.searchbar input{flex:1;border:0;outline:0;font-size:1rem;padding:12px 14px;border-radius:9px;color:var(--ink);background:transparent;min-width:0}
+.searchbar button{background:var(--gold);border:0;color:#231a03;font-weight:800;font-size:.95rem;padding:12px 26px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.searchbar button:hover{filter:brightness(1.06)}
+.scen{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;position:relative;z-index:1;align-items:center}
+.scen span{color:#CFE3D6;font-size:.85rem;font-weight:600}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:8px 16px;font-size:.85rem;font-weight:700;cursor:pointer}
+.chip:hover{background:rgba(255,255,255,.24)}
+.stats{display:flex;gap:26px;margin-top:26px;position:relative;z-index:1;flex-wrap:wrap}
+.stats div b{font-size:1.5rem;display:block}
+.stats div span{font-size:.8rem;color:#CFE3D6}
+/* sections */
+section.block{margin:30px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px}
+.card h2{font-size:1.35rem;margin-bottom:6px}
+.sub{color:var(--muted);font-size:.93rem;margin-bottom:18px}
+/* results */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.plot{border:1px solid var(--line);border-radius:12px;padding:18px;background:#fff;cursor:pointer;transition:.15s}
+.plot:hover{border-color:var(--em);transform:translateY(-2px);box-shadow:var(--shadow)}
+.plot .pid{font-size:.75rem;font-weight:800;color:var(--muted);letter-spacing:1px}
+.plot h3{font-size:1.08rem;margin:4px 0}
+.plot .meta{font-size:.85rem;color:var(--muted)}
+.plot .foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+/* tier chips */
+.tier{font-size:.72rem;font-weight:800;letter-spacing:1px;padding:5px 12px;border-radius:999px;text-transform:uppercase}
+.t-low{background:var(--em-soft);color:var(--em-deep)}
+.t-med{background:var(--amber-soft);color:var(--amber)}
+.t-high{background:#FDEBD8;color:#A34A00}
+.t-crit{background:var(--red-soft);color:var(--red)}
+/* dossier */
+.dossier-head{display:flex;gap:18px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
+.plotid{flex:1.4;min-width:280px}
+.plotid .kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:.92rem;margin-top:12px}
+.plotid .kv dt{color:var(--muted);font-weight:600}
+.plotid .kv dd{font-weight:600}
+.riskcard{flex:1;min-width:260px;background:linear-gradient(150deg,#10261C,#0E6B4A);color:#fff;border-radius:var(--radius);padding:22px;display:flex;gap:18px;align-items:center}
+.dial{position:relative;width:130px;height:130px;flex:none}
+.dial svg{transform:rotate(-90deg)}
+.dial .dv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial .dv b{font-size:1.9rem}
+.dial .dv span{font-size:.68rem;letter-spacing:1px;color:#CFE3D6;text-transform:uppercase}
+.riskcard .rt b{font-size:1.05rem}
+.riskcard .rt p{font-size:.85rem;color:#CFE3D6;margin-top:6px}
+/* signals */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
+.sig{border:1px solid var(--line);border-left:5px solid var(--em);border-radius:10px;padding:14px 16px;background:#fff}
+.sig.warn{border-left-color:var(--amber)}
+.sig.bad{border-left-color:var(--red)}
+.sig .w{float:right;font-weight:800;font-size:.95rem}
+.sig.bad .w{color:var(--red)}.sig.warn .w{color:var(--amber)}
+.sig h4{font-size:.95rem;margin-bottom:4px;padding-right:52px}
+.sig p{font-size:.83rem;color:var(--muted)}
+/* chain */
+.chain{display:flex;gap:0;margin-top:14px;flex-wrap:wrap}
+.clink{flex:1;min-width:180px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative}
+.clink:not(:last-child){margin-right:26px}
+.clink:not(:last-child)::after{content:"→";position:absolute;right:-24px;top:44%;font-size:1.2rem;color:var(--gold);font-weight:800}
+.clink .sv{font-size:.7rem;font-weight:800;letter-spacing:1.4px;color:var(--em);text-transform:uppercase}
+.clink h4{font-size:.98rem;margin:4px 0}
+.clink .kh{font-size:.8rem;color:var(--muted)}
+.clink.brk{border-color:var(--red);background:var(--red-soft)}
+.clink.brk .sv{color:var(--red)}
+/* tables */
+table.tbl{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:12px}
+.tbl th{text-align:left;padding:10px 12px;background:#F1F5F0;color:var(--muted);font-size:.76rem;letter-spacing:.8px;text-transform:uppercase}
+.tbl td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+.tbl tr:hover td{background:#FAFCF9}
+.pill{font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--em-soft);color:var(--em-deep)}
+.p-bad{background:var(--red-soft);color:var(--red)}
+.p-warn{background:var(--amber-soft);color:var(--amber)}
+.p-info{background:var(--blue-soft);color:var(--blue)}
+.hash{font-family:ui-monospace,Consolas,monospace;font-size:.78rem;background:#F1F5F0;padding:3px 8px;border-radius:6px;word-break:break-all}
+/* checklist */
+.check{list-style:none;margin-top:12px;display:grid;gap:10px}
+.check li{background:var(--gold-soft);border:1px solid #EBDCAC;border-radius:10px;padding:12px 16px;font-size:.9rem;display:flex;gap:10px}
+.check li::before{content:"☐";font-weight:800;color:var(--amber);flex:none}
+/* verifier */
+.ver-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.ver-grid label{font-size:.82rem;font-weight:700;color:var(--muted);display:block;margin-bottom:6px}
+.ver-grid input,.ver-grid select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:.95rem;outline:0}
+.ver-grid input:focus{border-color:var(--em)}
+.btn{background:var(--em);color:#fff;border:0;font-weight:800;padding:12px 26px;border-radius:10px;cursor:pointer;font-size:.95rem}
+.btn:hover{background:var(--em-deep)}
+.btn.ghost{background:#fff;color:var(--em-deep);border:1px solid var(--line)}
+.btn.gold{background:var(--gold);color:#231a03}
+.verdict{margin-top:16px;border-radius:12px;padding:18px;font-size:.95rem;display:none}
+.verdict.show{display:block}
+.verdict.ok{background:var(--em-soft);border:1px solid #BFE0CC}
+.verdict.no{background:var(--red-soft);border:1px solid #F0C4BC}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:14px}
+.step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+.step .n{width:34px;height:34px;border-radius:50%;background:var(--em);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.step h4{margin-bottom:6px}.step p{font-size:.87rem;color:var(--muted)}
+/* footer */
+footer.site{margin:44px 0 30px;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:.83rem}
+footer.site .wrap{display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between}
+.disclaimer{background:#FFF8E6;border:1px dashed var(--gold);border-radius:12px;padding:16px 18px;font-size:.85rem;color:#6B5A1E;margin-top:18px}
+/* misc */
+.hidden{display:none!important}
+.backlink{display:inline-block;margin-bottom:14px;color:var(--em);font-weight:700;cursor:pointer;font-size:.9rem}
+.backlink:hover{text-decoration:underline}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.mt{margin-top:20px}
+.center{text-align:center}
+.note{font-size:.82rem;color:var(--muted)}
+.kbd{background:#F1F5F0;border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.8rem;font-family:ui-monospace,monospace}
+@media(max-width:760px){
+  .hero{padding:34px 22px}.hero h1{font-size:1.7rem}
+  nav.main{display:none}.ver-grid,.grid2{grid-template-columns:1fr}
+  .searchbar{flex-direction:column}.searchbar button{width:100%}
+  .clink:not(:last-child){margin-right:0;margin-bottom:22px}
+  .clink:not(:last-child)::after{content:"↓";right:48%;top:auto;bottom:-24px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="#" onclick="goHome();return false">
+      <span class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD84D" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+      </span>
+      <span><b>LandVault</b><small data-i18n="tagline">Land Record Verifier</small></span>
+    </a>
+    <nav class="main">
+      <a href="#" class="on" data-i18n="nav_home" onclick="goHome();return false">Home</a>
+      <a href="#verifier" data-i18n="nav_verify">Verify a Deed</a>
+      <a href="#how" data-i18n="nav_how">How it works</a>
+    </nav>
+    <div class="top-right">
+      <span class="badge-demo" data-i18n="demobadge">Synthetic Demo</span>
+      <div class="lang"><button id="langEn" class="on" onclick="setLang('en')">EN</button><button id="langBn" onclick="setLang('bn')">বাং</button></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- HOME -->
+  <div id="view-home">
+    <div class="hero">
+      <h1 data-i18n="hero_h">Before you buy land, <span class="hl">verify it.</span></h1>
+      <p data-i18n="hero_p">LandVault pulls the ownership chain, mutation history and registered documents of any plot into one verified dossier — and flags forgery, double-selling and record mismatches before your money moves.</p>
+      <div class="searchbar">
+        <input id="q" data-i18n-ph="search_ph" placeholder="Search by dag, khatian, mouza, owner or plot ID…  e.g. 142" onkeydown="if(event.key==='Enter')doSearch()">
+        <button onclick="doSearch()" data-i18n="search_btn">Verify Plot</button>
+      </div>
+      <div class="scen">
+        <span data-i18n="try">Try a demo case:</span>
+        <button class="chip" onclick="openPlot('SV-001')" data-i18n="sc_clean">✓ Clean plot</button>
+        <button class="chip" onclick="openPlot('SV-007')" data-i18n="sc_double">⚠ Double-sold plot</button>
+        <button class="chip" onclick="openPlot('SV-009')" data-i18n="sc_forge">✕ Forged deed</button>
+      </div>
+      <div class="stats">
+        <div><b class="num" id="st-plots">12</b><span data-i18n="st1">plots in demo registry</span></div>
+        <div><b class="num">4</b><span data-i18n="st2">survey generations traced</span></div>
+        <div><b class="num">6</b><span data-i18n="st3">fraud signals checked</span></div>
+        <div><b class="num">0–100</b><span data-i18n="st4">explainable risk score</span></div>
+      </div>
+    </div>
+
+    <section class="block" id="resultsBlock" style="display:none">
+      <div class="card">
+        <h2 data-i18n="res_h">Matching plots</h2>
+        <p class="sub" data-i18n="res_p">Click any plot to open its full verification dossier.</p>
+        <div class="res-grid" id="results"></div>
+      </div>
+    </section>
+
+    <section class="block" id="verifier">
+      <div class="card">
+        <h2 data-i18n="ver_h">Deed authenticity checker</h2>
+        <p class="sub" data-i18n="ver_p">Every registered deed carries a cryptographic hash. Paste a deed number and the hash printed on the paper copy — LandVault tells you instantly whether it matches the registry.</p>
+        <div class="ver-grid">
+          <div><label data-i18n="ver_deed">Deed number</label><input id="v-deed" placeholder="DL-2024-11802"></div>
+          <div><label data-i18n="ver_hash">Hash from the paper copy</label><input id="v-hash" placeholder="9f2c…"></div>
+        </div>
+        <div class="mt" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="verifyDeed()" data-i18n="ver_btn">Check authenticity</button>
+          <button class="btn ghost" onclick="tamperDemo()" data-i18n="ver_tamper">Simulate a tampered copy</button>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <p class="note mt" data-i18n="ver_note">Demo: pick any deed from a plot dossier, or try <span class="kbd">DL-2024-11802</span> with hash <span class="kbd">9f2c41be07d3</span>.</p>
+      </div>
+    </section>
+
+    <section class="block" id="how">
+      <div class="card">
+        <h2 data-i18n="how_h">How LandVault verifies a plot</h2>
+        <p class="sub" data-i18n="how_p">Deterministic checks on the record trail — no black box. Every point of risk is shown with its evidence.</p>
+        <div class="steps">
+          <div class="step"><div class="n">1</div><h4 data-i18n="s1h">Rebuild the chain</h4><p data-i18n="s1p">Ownership is traced across all four survey generations — CS, SA, RS, BS — plus every mutation. A break anywhere is flagged.</p></div>
+          <div class="step"><div class="n">2</div><h4 data-i18n="s2h">Verify the documents</h4><p data-i18n="s2p">Deed and khatian hashes are compared against the registry. A single altered character fails the check.</p></div>
+          <div class="step"><div class="n">3</div><h4 data-i18n="s3h">Score the risk</h4><p data-i18n="s3p">Six fraud signals are weighted into a 0–100 score with plain-language evidence and a buyer's checklist.</p></div>
+        </div>
+        <div class="disclaimer" data-i18n="disc">All records on this page are <b>synthetic demo data</b> generated for the LandHack 2026 hackathon. No real persons, plots, deeds or NID numbers are used. This is a demonstration of verification logic, not a legal opinion — always confirm with the sub-registry and AC Land offices.</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- DOSSIER -->
+  <div id="view-dossier" class="hidden">
+    <span class="backlink" onclick="goHome()">← <span data-i18n="back">Back to search</span></span>
+    <div id="dossier"></div>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div><b>LandVault</b> · <span data-i18n="ft">Built for LandHack 2026 · CSE-TECH, DIU · Track: Digital Land Records, Verification &amp; Digitization</span></div>
+    <div class="note" data-i18n="ft2">Demo data only. AI-assisted build, disclosed in README.</div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+/* ============ I18N ============ */
+const I18N = {
+en:{tagline:"Land Record Verifier",nav_home:"Home",nav_verify:"Verify a Deed",nav_how:"How it works",demobadge:"Synthetic Demo",
+hero_h:'Before you buy land, <span class="hl">verify it.</span>',
+hero_p:"LandVault pulls the ownership chain, mutation history and registered documents of any plot into one verified dossier — and flags forgery, double-selling and record mismatches before your money moves.",
+search_ph:"Search by dag, khatian, mouza, owner or plot ID…  e.g. 142",search_btn:"Verify Plot",try:"Try a demo case:",
+sc_clean:"✓ Clean plot",sc_double:"⚠ Double-sold plot",sc_forge:"✕ Forged deed",
+st1:"plots in demo registry",st2:"survey generations traced",st3:"fraud signals checked",st4:"explainable risk score",
+res_h:"Matching plots",res_p:"Click any plot to open its full verification dossier.",
+ver_h:"Deed authenticity checker",ver_p:"Every registered deed carries a cryptographic hash. Paste a deed number and the hash printed on the paper copy — LandVault tells you instantly whether it matches the registry.",
+ver_deed:"Deed number",ver_hash:"Hash from the paper copy",ver_btn:"Check authenticity",ver_tamper:"Simulate a tampered copy",
+ver_note:'Demo: pick any deed from a plot dossier, or try <span class="kbd">DL-2024-11802</span> with hash <span class="kbd">9f2c41be07d3</span>.',
+ver_ok_t:"✓ AUTHENTIC — hash matches the registry.",ver_ok_p:"This deed copy is identical to the registered record.",
+ver_no_t:"✕ MISMATCH — hash does NOT match the registry.",ver_no_p:"This copy differs from the registered deed. Treat as potentially forged and verify at the sub-registry office before any transaction.",
+ver_nf:"Deed number not found in the demo registry.",
+how_h:"How LandVault verifies a plot",how_p:"Deterministic checks on the record trail — no black box. Every point of risk is shown with its evidence.",
+s1h:"Rebuild the chain",s1p:"Ownership is traced across all four survey generations — CS, SA, RS, BS — plus every mutation. A break anywhere is flagged.",
+s2h:"Verify the documents",s2p:"Deed and khatian hashes are compared against the registry. A single altered character fails the check.",
+s3h:"Score the risk",s3p:"Six fraud signals are weighted into a 0–100 score with plain-language evidence and a buyer's checklist.",
+disc:"All records on this page are <b>synthetic demo data</b> generated for the LandHack 2026 hackathon. No real persons, plots, deeds or NID numbers are used. This is a demonstration of verification logic, not a legal opinion — always confirm with the sub-registry and AC Land offices.",
+back:"Back to search",ft:"Built for LandHack 2026 · CSE-TECH, DIU · Track: Digital Land Records, Verification & Digitization",ft2:"Demo data only. AI-assisted build, disclosed in README.",
+d_risk:"Fraud-risk score",d_chain:"Ownership chain across survey generations",d_mut:"Mutation & transfer history",d_docs:"Registered documents",
+d_flags:"What to check before you buy",d_low:"Low risk — records are consistent.",d_med:"Medium risk — review the flagged items.",d_high:"High risk — do not transact without official verification.",d_crit:"CRITICAL — strong fraud indicators. Stop and verify officially.",
+d_district:"District",d_upazila:"Upazila",d_mouza:"Mouza",d_dag:"Dag no.",d_khatian:"Khatian no.",d_area:"Area",d_type:"Land type",d_owner:"Current owner",
+d_dec:"decimal",nores:"No plots match. Try a dag number (e.g. 142), a khatian (e.g. RS-881), or a name.",
+s_double_t:"Double sale detected",s_double_p:"Two different buyers hold deeds for this same plot with overlapping claims.",
+s_hash_t:"Deed hash mismatch",s_hash_p:"A document hash does not match the registry — the paper copy may be altered or forged.",
+s_break_t:"Ownership chain break",s_break_p:"The seller in a later record does not follow from the recorded owner of the previous survey.",
+s_regmut_t:"Registration–mutation gap",s_regmut_p:"A deed was registered but never mutated in the AC Land record.",
+s_flip_t:"Suspicious rapid resale",s_flip_p:"The plot changed hands twice within 12 months — a classic flipping pattern.",
+s_case_t:"Pending litigation",s_case_p:"A court case involving this plot is on record.",
+s_khas_t:"Khas / government land",s_khas_p:"The plot is recorded as khas land — private sale is not valid.",
+s_acq_t:"Acquisition notice",s_acq_p:"A government acquisition notice exists for this area.",
+c_double:"Get certified copies of BOTH deeds from the sub-registry office and compare deed numbers, dates and schedules.",
+c_hash:"Demand the original deed and have its hash re-verified at the sub-registry office before paying any advance.",
+c_break:"Trace the seller's title back through RS and BS khatians at the AC Land office; require a succession certificate for inherited plots.",
+c_regmut:"Ask the seller to complete the pending mutation first — buy only after the khatian shows your seller as owner.",
+c_flip:"Ask why the plot is being resold so quickly; check whether the earlier sale was genuine or a paper flip.",
+c_case:"Obtain the case number and status from the court; buy only after the dispute is resolved and recorded.",
+c_khas:"Verify land classification at the AC Land office — khas land cannot be privately sold.",
+c_acq:"Check the acquisition notice scope and compensation status at the DC office.",
+c_none:"Records look consistent. Still verify the latest khatian and deed at the sub-registry and AC Land offices before registering.",
+col_date:"Date",col_type:"Type",col_from:"From",col_to:"To",col_deed:"Deed",col_status:"Status",col_doc:"Document",col_ref:"Reference",col_hash:"Registry hash",col_v:"Status",
+v_ok:"Verified",v_bad:"Mismatch",v_na:"—",st_done:"Completed",st_pend:"Pending",verify_this:"Verify"},
+bn:{tagline:"জমির রেকর্ড যাচাইকারী",nav_home:"হোম",nav_verify:"দলিল যাচাই",nav_how:"কীভাবে কাজ করে",demobadge:"ডেমো ডেটা",
+hero_h:'জমি কেনার আগে, <span class="hl">যাচাই করুন।</span>',
+hero_p:"ল্যান্ডভল্ট যেকোনো প্লটের মালিকানার ধারাবাহিকতা, নামজারির ইতিহাস ও নিবন্ধিত দলিল এক জায়গায় এনে দেয় — এবং টাকা দেওয়ার আগেই জালিয়াতি, একাধিক বিক্রি ও রেকর্ডের গরমিল ধরিয়ে দেয়।",
+search_ph:"দাগ, খতিয়ান, মৌজা, মালিকের নাম বা প্লট আইডি দিয়ে খুঁজুন… যেমন 142",search_btn:"প্লট যাচাই",try:"ডেমো কেস দেখুন:",
+sc_clean:"✓ নির্ঝঞ্ঝাট প্লট",sc_double:"⚠ দুবার বিক্রি হওয়া প্লট",sc_forge:"✕ জাল দলিল",
+st1:"ডেমো রেজিস্ট্রিতে প্লট",st2:"জরিপ প্রজন্মের ধারা",st3:"জালিয়াতির সংকেত পরীক্ষা",st4:"ব্যাখ্যাযোগ্য ঝুঁকি স্কোর",
+res_h:"মিলে যাওয়া প্লট",res_p:"পূর্ণ যাচাই ডসিয়ার খুলতে যেকোনো প্লটে ক্লিক করুন।",
+ver_h:"দলিলের সত্যতা পরীক্ষা",ver_p:"প্রতিটি নিবন্ধিত দলিলের একটি ক্রিপ্টোগ্রাফিক হ্যাশ থাকে। দলিল নম্বর ও কাগজের কপিতে ছাপা হ্যাশটি দিন — ল্যান্ডভল্ট সাথে সাথে জানিয়ে দেবে রেজিস্ট্রির সাথে মিলছে কিনা।",
+ver_deed:"দলিল নম্বর",ver_hash:"কাগজের কপির হ্যাশ",ver_btn:"সত্যতা পরীক্ষা",ver_tamper:"বিকৃত কপির ডেমো",
+ver_note:'ডেমো: প্লট ডসিয়ার থেকে যেকোনো দলিল নিন, অথবা <span class="kbd">DL-2024-11802</span> ও হ্যাশ <span class="kbd">9f2c41be07d3</span> চেষ্টা করুন।',
+ver_ok_t:"✓ খাঁটি — হ্যাশ রেজিস্ট্রির সাথে মিলেছে।",ver_ok_p:"এই দলিলের কপি নিবন্ধিত রেকর্ডের হুবহু অনুলিপি।",
+ver_no_t:"✕ অমিল — হ্যাশ রেজিস্ট্রির সাথে মিলছে না।",ver_no_p:"এই কপি নিবন্ধিত দলিল থেকে আলাদা। সম্ভাব্য জাল দলিল হিসেবে ধরুন এবং লেনদেনের আগে সাব-রেজিস্ট্রি অফিসে যাচাই করুন।",
+ver_nf:"ডেমো রেজিস্ট্রিতে এই দলিল নম্বর পাওয়া যায়নি।",
+how_h:"ল্যান্ডভল্ট কীভাবে প্লট যাচাই করে",how_p:"রেকর্ডের ধারার ওপর নির্ণায়ক পরীক্ষা — কোনো ব্ল্যাক বক্স নয়। প্রতিটি ঝুঁকির প্রমাণ দেখানো হয়।",
+s1h:"ধারা পুনর্গঠন",s1p:"চারটি জরিপ প্রজন্ম — সিএস, এসএ, আরএস, বিএস — এবং প্রতিটি নামজারি ধরে মালিকানা যাচাই করা হয়। কোথাও ছেদ থাকলে ফ্ল্যাগ ওঠে।",
+s2h:"দলিল যাচাই",s2p:"দলিল ও খতিয়ানের হ্যাশ রেজিস্ট্রির সাথে মেলানো হয়। একটি অক্ষর বদলালেও পরীক্ষায় ফেল করে।",
+s3h:"ঝুঁকি স্কোর",s3p:"ছয়টি জালিয়াতির সংকেতকে ওজন দিয়ে ০–১০০ স্কোর, সহজ ভাষায় প্রমাণ ও ক্রেতার চেকলিস্ট দেওয়া হয়।",
+disc:"এই পেজের সব রেকর্ড <b>কৃত্রিম ডেমো ডেটা</b> — ল্যান্ডহ্যাক ২০২৬ হ্যাকাথনের জন্য তৈরি। কোনো বাস্তব ব্যক্তি, প্লট, দলিল বা এনআইডি ব্যবহার করা হয়নি। এটি যাচাই-লজিকের প্রদর্শনী, আইনি মতামত নয় — নিবন্ধনের আগে সাব-রেজিস্ট্রি ও এসি ল্যান্ড অফিসে অবশ্যই নিশ্চিত করুন।",
+back:"খোঁজায় ফিরুন",ft:"ল্যান্ডহ্যাক ২০২৬-এর জন্য নির্মিত · সিএসই-টেক, ডিআইইউ · ট্র্যাক: ডিজিটাল ল্যান্ড রেকর্ড, যাচাই ও ডিজিটাইজেশন",ft2:"শুধু ডেমো ডেটা। AI-সহায়তায় নির্মিত, README-তে উল্লেখ আছে।",
+d_risk:"জালিয়াতি-ঝুঁকি স্কোর",d_chain:"জরিপ প্রজন্ম জুড়ে মালিকানার ধারা",d_mut:"নামজারি ও হস্তান্তরের ইতিহাস",d_docs:"নিবন্ধিত দলিলপত্র",
+d_flags:"কেনার আগে যা যাচাই করবেন",d_low:"কম ঝুঁকি — রেকর্ড সামঞ্জস্যপূর্ণ।",d_med:"মাঝারি ঝুঁকি — ফ্ল্যাগ করা বিষয়গুলো পর্যালোচনা করুন।",d_high:"উচ্চ ঝুঁকি — সরকারি যাচাই ছাড়া লেনদেন করবেন না।",d_crit:"গুরুতর — শক্তিশালী জালিয়াতির ইঙ্গিত। থামুন এবং আনুষ্ঠানিকভাবে যাচাই করুন।",
+d_district:"জেলা",d_upazila:"উপজেলা",d_mouza:"মৌজা",d_dag:"দাগ নং",d_khatian:"খতিয়ান নং",d_area:"আয়তন",d_type:"জমির ধরন",d_owner:"বর্তমান মালিক",
+d_dec:"শতাংশ",nores:"কোনো প্লট মেলেনি। দাগ নম্বর (যেমন 142), খতিয়ান (যেমন RS-881) বা নাম দিয়ে চেষ্টা করুন।",
+s_double_t:"একাধিক বিক্রি শনাক্ত",s_double_p:"একই প্লটের জন্য দুজন ভিন্ন ক্রেতার দলিল রয়েছে — দাবি পরস্পরবিরোধী।",
+s_hash_t:"দলিলের হ্যাশ অমিল",s_hash_p:"কোনো দলিলের হ্যাশ রেজিস্ট্রির সাথে মিলছে না — কাগজের কপি বদলানো বা জাল হতে পারে।",
+s_break_t:"মালিকানার ধারায় ছেদ",s_break_p:"পরের রেকর্ডের বিক্রেতা আগের জরিপের রেকর্ডকৃত মালিকের ধারাবাহিকতায় আসেন না।",
+s_regmut_t:"নিবন্ধন–নামজারি গরমিল",s_regmut_p:"একটি দলিল নিবন্ধিত হয়েছে কিন্তু এসি ল্যান্ড রেকর্ডে নামজারি হয়নি।",
+s_flip_t:"সন্দেহজনক দ্রুত পুনর্বিক্রি",s_flip_p:"১২ মাসের মধ্যে প্লটটি দুবার হাতবদল হয়েছে — ক্লাসিক ফ্লিপিং প্যাটার্ন।",
+s_case_t:"মামলা চলমান",s_case_p:"এই প্লট নিয়ে আদালতে মামলা রেকর্ড আছে।",
+s_khas_t:"খাস / সরকারি জমি",s_khas_p:"প্লটটি খাস জমি হিসেবে রেকর্ডভুক্ত — ব্যক্তিগত বিক্রি বৈধ নয়।",
+s_acq_t:"অধিগ্রহণের নোটিশ",s_acq_p:"এই এলাকার জন্য সরকারি অধিগ্রহণের নোটিশ রয়েছে।",
+c_double:"সাব-রেজিস্ট্রি অফিস থেকে উভয় দলিলের সত্যায়িত কপি নিন এবং দলিল নম্বর, তারিখ ও তফসিল মিলিয়ে দেখুন।",
+c_hash:"অগ্রিম দেওয়ার আগে মূল দলিল চান এবং সাব-রেজিস্ট্রি অফিসে হ্যাশ পুনর্যাচাই করান।",
+c_break:"এসি ল্যান্ড অফিসে আরএস ও বিএস খতিয়ান ধরে বিক্রেতার স্বত্ব যাচাই করুন; উত্তরাধিকারসূত্রে পাওয়া প্লটে ওয়ারিশ সনদ চান।",
+c_regmut:"বিক্রেতাকে আগে বকেয়া নামজারি শেষ করতে বলুন — খতিয়ানে বিক্রেতা মালিক হিসেবে না আসা পর্যন্ত কিনবেন না।",
+c_flip:"এত দ্রুত কেন পুনর্বিক্রি হচ্ছে জিজ্ঞেস করুন; আগের বিক্রিটি আসল ছিল নাকি কাগুজে ফ্লিপ যাচাই করুন।",
+c_case:"আদালত থেকে মামলার নম্বর ও অবস্থা নিন; বিরোধ নিষ্পত্তি ও রেকর্ডভুক্ত হওয়ার পরই কিনুন।",
+c_khas:"এসি ল্যান্ড অফিসে জমির শ্রেণি যাচাই করুন — খাস জমি ব্যক্তিগতভাবে বিক্রি করা যায় না।",
+c_acq:"ডিসি অফিসে অধিগ্রহণ নোটিশের আওতা ও ক্ষতিপূরণের অবস্থা যাচাই করুন।",
+c_none:"রেকর্ড সামঞ্জস্যপূর্ণ মনে হচ্ছে। তবু নিবন্ধনের আগে সাব-রেজিস্ট্রি ও এসি ল্যান্ড অফিসে সর্বশেষ খতিয়ান ও দলিল যাচাই করুন।",
+col_date:"তারিখ",col_type:"ধরন",col_from:"হইতে",col_to:"প্রতি",col_deed:"দলিল",col_status:"অবস্থা",col_doc:"দলিলপত্র",col_ref:"রেফারেন্স",col_hash:"রেজিস্ট্রি হ্যাশ",col_v:"অবস্থা",
+v_ok:"যাচাইকৃত",v_bad:"অমিল",v_na:"—",st_done:"সম্পন্ন",st_pend:"বকেয়া",verify_this:"যাচাই"}
+};
+let LANG = localStorage.getItem("lv-lang") || "en";
+function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.en[k] || k; }
+function setLang(l){ LANG=l; localStorage.setItem("lv-lang",l);
+  document.getElementById("langEn").classList.toggle("on",l==="en");
+  document.getElementById("langBn").classList.toggle("on",l==="bn");
+  document.documentElement.lang = l==="bn"?"bn":"en";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder = t(el.getAttribute("data-i18n-ph")); });
+  if(!document.getElementById("view-dossier").classList.contains("hidden") && LAST_PLOT) renderDossier(LAST_PLOT);
+  else if(!document.getElementById("resultsBlock").style.display || document.getElementById("resultsBlock").style.display!=="none"){ /* re-run */ if(LAST_Q) doSearch(true); }
+}
+
+/* ============ SYNTHETIC REGISTRY (demo data — all fictional) ============ */
+const PLOTS = [
+{id:"SV-001",district:"Dhaka",upazila:"Savar",mouza:"Birulia",dag:"142",khatian:"RS-881",area:12.5,type:"Residential",owner:"Karim Uddin",
+ chain:[{s:"CS",kh:"CS-112",owner:"Hazi Delwar Hossain",yr:1921},{s:"SA",kh:"SA-340",owner:"Delwar Hossain",yr:1958},{s:"RS",kh:"RS-881",owner:"Karim Uddin",yr:1989},{s:"BS",kh:"BS-2077",owner:"Karim Uddin",yr:2013}],
+ sales:[{date:"1989-03-14",deed:"DL-1989-00312",seller:"Delwar Hossain (heirs)",buyer:"Karim Uddin",amount:850000,reg:true,mut:true},{date:"2013-06-02",deed:"—",seller:"—",buyer:"—",amount:0,reg:true,mut:true,note:"BS record update"}],
+ docs:[{type:"Khatian (RS)",ref:"RS-881",hash:"c41d90ab12ef",ok:true},{type:"Khatian (BS)",ref:"BS-2077",hash:"77b2e10cd944",ok:true},{type:"Deed",ref:"DL-1989-00312",hash:"9f2c41be07d3",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-002",district:"Dhaka",upazila:"Savar",mouza:"Birulia",dag:"143",khatian:"RS-882",area:8.0,type:"Residential",owner:"Rahima Begum",
+ chain:[{s:"CS",kh:"CS-113",owner:"Hazi Delwar Hossain",yr:1921},{s:"SA",kh:"SA-341",owner:"Delwar Hossain",yr:1958},{s:"RS",kh:"RS-882",owner:"Rahima Begum",yr:1994},{s:"BS",kh:"BS-2078",owner:"Rahima Begum",yr:2013}],
+ sales:[{date:"1994-11-20",deed:"DL-1994-07881",seller:"Delwar Hossain (heirs)",buyer:"Rahima Begum",amount:620000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-882",hash:"a0b91cc437d1",ok:true},{type:"Deed",ref:"DL-1994-07881",hash:"51de883a0bc2",ok:true}],
+ flags:{case:true,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-003",district:"Dhaka",upazila:"Savar",mouza:"Tetuljhora",dag:"88",khatian:"RS-410",area:22.0,type:"Commercial",owner:"Anwar Hossain",
+ chain:[{s:"CS",kh:"CS-071",owner:"Jabbar Sheikh",yr:1922},{s:"SA",kh:"SA-198",owner:"Jabbar Sheikh",yr:1957},{s:"RS",kh:"RS-410",owner:"Mofizur Rahman",yr:1990},{s:"BS",kh:"BS-1190",owner:"Anwar Hossain",yr:2025}],
+ sales:[{date:"2024-12-05",deed:"DL-2024-11802",seller:"Mofizur Rahman",buyer:"Belal Sheikh",amount:12500000,reg:true,mut:true},{date:"2025-08-19",deed:"DL-2025-14409",seller:"Belal Sheikh",buyer:"Anwar Hossain",amount:16900000,reg:true,mut:false}],
+ docs:[{type:"Khatian (RS)",ref:"RS-410",hash:"e7c204af91b3",ok:true},{type:"Deed",ref:"DL-2024-11802",hash:"9f2c41be07d3",ok:true},{type:"Deed",ref:"DL-2025-14409",hash:"3bd0771c9e50",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-004",district:"Dhaka",upazila:"Savar",mouza:"Dhamsona",dag:"210",khatian:"RS-655",area:15.75,type:"Agricultural",owner:"Mofizur Rahman",
+ chain:[{s:"CS",kh:"CS-203",owner:"Kashem Ali",yr:1920},{s:"SA",kh:"SA-512",owner:"Kashem Ali",yr:1959},{s:"RS",kh:"RS-655",owner:"Mofizur Rahman",yr:1991},{s:"BS",kh:"BS-1602",owner:"Mofizur Rahman",yr:2014}],
+ sales:[{date:"2023-05-30",deed:"DL-2023-09177",seller:"Kashem Ali (heirs)",buyer:"Mofizur Rahman",amount:4800000,reg:true,mut:false}],
+ docs:[{type:"Khatian (RS)",ref:"RS-655",hash:"f28a13de60c7",ok:true},{type:"Deed",ref:"DL-2023-09177",hash:"aa10c4d2f836",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-005",district:"Gazipur",upazila:"Kaliakair",mouza:"Chandra",dag:"41",khatian:"RS-302",area:30.0,type:"Industrial",owner:"Rafiqul Islam",
+ chain:[{s:"CS",kh:"CS-045",owner:"Nurul Haque",yr:1923},{s:"SA",kh:"SA-120",owner:"Nurul Haque",yr:1956},{s:"RS",kh:"RS-302",owner:"Shahana Parvin",yr:1992},{s:"BS",kh:"BS-0881",owner:"Rafiqul Islam",yr:2024}],
+ sales:[{date:"2024-02-11",deed:"DL-2024-03110",seller:"Shahana Parvin",buyer:"Rafiqul Islam",amount:21000000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-302",hash:"12cd88f0a4b9",ok:true},{type:"Deed",ref:"DL-2024-03110",hash:"d4e5f607182a",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-006",district:"Gazipur",upazila:"Kaliakair",mouza:"Chandra",dag:"42",khatian:"RS-303",area:18.25,type:"Residential",owner:"Salma Akter",
+ chain:[{s:"CS",kh:"CS-046",owner:"Nurul Haque",yr:1923},{s:"SA",kh:"SA-121",owner:"Nurul Haque",yr:1956},{s:"RS",kh:"RS-303",owner:"Salma Akter",yr:1995},{s:"BS",kh:"BS-0882",owner:"Salma Akter",yr:2015}],
+ sales:[{date:"1995-09-17",deed:"DL-1995-06602",seller:"Nurul Haque (heirs)",buyer:"Salma Akter",amount:1500000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-303",hash:"88f1c2d3e405",ok:true},{type:"Deed",ref:"DL-1995-06602",hash:"REGISTRY:6b70aa19c2d4 / PAPER:6b70aa19c2e4",ok:false}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-007",district:"Gazipur",upazila:"Kaliakair",mouza:"Sutrapur",dag:"19",khatian:"RS-118",area:25.5,type:"Commercial",owner:"Belal Sheikh",
+ chain:[{s:"CS",kh:"CS-090",owner:"Aziz Master",yr:1921},{s:"SA",kh:"SA-240",owner:"Aziz Master",yr:1958},{s:"RS",kh:"RS-118",owner:"Fatema Khatun",yr:1993},{s:"BS",kh:"BS-0450",owner:"Belal Sheikh",yr:2025}],
+ sales:[{date:"2024-06-14",deed:"DL-2024-07731",seller:"Fatema Khatun",buyer:"Belal Sheikh",amount:14200000,reg:true,mut:true},{date:"2025-02-02",deed:"DL-2025-01208",seller:"Fatema Khatun",buyer:"Nasrin Akter",amount:13800000,reg:true,mut:false}],
+ docs:[{type:"Khatian (RS)",ref:"RS-118",hash:"0be451a9d8f3",ok:true},{type:"Deed",ref:"DL-2024-07731",hash:"c7d21e90ab44",ok:true},{type:"Deed",ref:"DL-2025-01208",hash:"f90b3c17de62",ok:true}],
+ flags:{case:true,khas:false,acq:false},
+ doubleSale:{deedA:"DL-2024-07731",buyerA:"Belal Sheikh",dateA:"2024-06-14",deedB:"DL-2025-01208",buyerB:"Nasrin Akter",dateB:"2025-02-02"},
+ chainBreak:null},
+{id:"SV-008",district:"Cumilla",upazila:"Daudkandi",mouza:"Gouripur",dag:"512",khatian:"RS-720",area:11.0,type:"Residential",owner:"Nasrin Akter",
+ chain:[{s:"CS",kh:"CS-310",owner:"Taleb Ali",yr:1924},{s:"SA",kh:"SA-700",owner:"Taleb Ali",yr:1955},{s:"RS",kh:"RS-720",owner:"Taleb Ali (heirs)",yr:1990},{s:"BS",kh:"BS-1905",owner:"Nasrin Akter",yr:2016}],
+ sales:[{date:"2016-01-25",deed:"DL-2016-00871",seller:"Jalal Uddin",buyer:"Nasrin Akter",amount:3200000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-720",hash:"4d5e6f708192",ok:true},{type:"Deed",ref:"DL-2016-00871",hash:"b8c9d0e1f2a3",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,
+ chainBreak:{between:"RS → BS",detail:"RS khatian records owner “Taleb Ali (heirs)”, but the 2016 deed seller is “Jalal Uddin” with no succession link on record."}},
+{id:"SV-009",district:"Cumilla",upazila:"Daudkandi",mouza:"Gouripur",dag:"513",khatian:"RS-721",area:9.5,type:"Residential",owner:"Shahana Parvin",
+ chain:[{s:"CS",kh:"CS-311",owner:"Taleb Ali",yr:1924},{s:"SA",kh:"SA-701",owner:"Taleb Ali",yr:1955},{s:"RS",kh:"RS-721",owner:"Rashed Khan",yr:1991},{s:"BS",kh:"BS-1906",owner:"Shahana Parvin",yr:2022}],
+ sales:[{date:"2022-10-08",deed:"DL-2022-10543",seller:"Rashed Khan",buyer:"Shahana Parvin",amount:5100000,reg:true,mut:false}],
+ docs:[{type:"Khatian (RS)",ref:"RS-721",hash:"5e6f708192a3",ok:true},{type:"Deed",ref:"DL-2022-10543",hash:"REGISTRY:1a2b3c4d5e6f / PAPER:1a2b3c4d5e70",ok:false}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,
+ chainBreak:{between:"SA → RS",detail:"SA owner “Taleb Ali” does not connect to RS owner “Rashed Khan” — no transfer or succession record bridges the gap."}},
+{id:"SV-010",district:"Chattogram",upazila:"Sitakunda",mouza:"Barabkunda",dag:"77",khatian:"RS-090",area:40.0,type:"Agricultural",owner:"—",
+ chain:[{s:"CS",kh:"CS-008",owner:"— (khas)",yr:1922},{s:"SA",kh:"SA-022",owner:"— (khas)",yr:1957},{s:"RS",kh:"RS-090",owner:"— (khas)",yr:1992},{s:"BS",kh:"BS-0311",owner:"— (khas)",yr:2018}],
+ sales:[],docs:[{type:"Khatian (RS)",ref:"RS-090",hash:"6f708192a3b4",ok:true}],
+ flags:{case:false,khas:true,acq:false},doubleSale:null,chainBreak:null},
+{id:"SV-011",district:"Chattogram",upazila:"Sitakunda",mouza:"Barabkunda",dag:"78",khatian:"RS-091",area:14.0,type:"Residential",owner:"Abdul Malek",
+ chain:[{s:"CS",kh:"CS-009",owner:"Fazlu Miah",yr:1922},{s:"SA",kh:"SA-023",owner:"Fazlu Miah",yr:1957},{s:"RS",kh:"RS-091",owner:"Abdul Malek",yr:1996},{s:"BS",kh:"BS-0312",owner:"Abdul Malek",yr:2018}],
+ sales:[{date:"1996-04-02",deed:"DL-1996-02114",seller:"Fazlu Miah (heirs)",buyer:"Abdul Malek",amount:980000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-091",hash:"708192a3b4c5",ok:true},{type:"Deed",ref:"DL-1996-02114",hash:"d1e2f3a4b5c6",ok:true}],
+ flags:{case:true,khas:false,acq:true},doubleSale:null,chainBreak:null},
+{id:"SV-012",district:"Dhaka",upazila:"Savar",mouza:"Birulia",dag:"160",khatian:"RS-900",area:6.75,type:"Residential",owner:"Fatema Khatun",
+ chain:[{s:"CS",kh:"CS-114",owner:"Hazi Delwar Hossain",yr:1921},{s:"SA",kh:"SA-342",owner:"Delwar Hossain",yr:1958},{s:"RS",kh:"RS-900",owner:"Fatema Khatun",yr:1999},{s:"BS",kh:"BS-2091",owner:"Fatema Khatun",yr:2013}],
+ sales:[{date:"1999-07-19",deed:"DL-1999-05440",seller:"Delwar Hossain (heirs)",buyer:"Fatema Khatun",amount:540000,reg:true,mut:true}],
+ docs:[{type:"Khatian (RS)",ref:"RS-900",hash:"8192a3b4c5d6",ok:true},{type:"Deed",ref:"DL-1999-05440",hash:"e2f3a4b5c6d7",ok:true}],
+ flags:{case:false,khas:false,acq:false},doubleSale:null,chainBreak:null}
+];
+const DEED_INDEX = {};
+PLOTS.forEach(p=>p.docs.forEach(d=>{ if(d.type==="Deed"){ const h=d.hash.startsWith("REGISTRY:")?d.hash.split("/")[0].replace("REGISTRY:","").trim():d.hash; DEED_INDEX[d.ref]={plot:p.id,hash:h,ok:d.ok}; }}));
+
+/* ============ RISK ENGINE ============ */
+const W = {double:45, hash:40, brk:30, regmut:20, flip:20, kase:15, khas:15, acq:15};
+const TIER_TXT = {low:"d_low", med:"d_med", high:"d_high", crit:"d_crit"};
+const TIER_CLS = {low:"t-low", med:"t-med", high:"t-high", crit:"t-crit"};
+const TIER_COL = {low:"#2FA36B", med:"#E0A020", high:"#E06A1B", crit:"#E0483A"};
+let LAST_PLOT = null, LAST_Q = "";
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function assess(p){
+  const sigs=[];
+  if(p.doubleSale) sigs.push({w:W.double,tk:"s_double_t",pk:"s_double_p",ex:`${p.doubleSale.deedA} (${p.doubleSale.buyerA}, ${p.doubleSale.dateA}) → ${p.doubleSale.deedB} (${p.doubleSale.buyerB}, ${p.doubleSale.dateB})`,ck:"c_double",cls:"bad"});
+  p.docs.forEach(d=>{ if(!d.ok) sigs.push({w:W.hash,tk:"s_hash_t",pk:"s_hash_p",ex:`${d.ref}: ${d.hash}`,ck:"c_hash",cls:"bad"}); });
+  if(p.chainBreak) sigs.push({w:W.brk,tk:"s_break_t",pk:"s_break_p",ex:`${p.chainBreak.between} — ${p.chainBreak.detail}`,ck:"c_break",cls:"bad"});
+  p.sales.forEach(s=>{ if(s.reg && !s.mut && s.deed && s.deed!=="—") sigs.push({w:W.regmut,tk:"s_regmut_t",pk:"s_regmut_p",ex:`${s.deed} (${s.date})`,ck:"c_regmut",cls:"warn"}); });
+  const real=p.sales.filter(s=>s.deed && s.deed!=="—");
+  for(let i=1;i<real.length;i++){
+    const d1=new Date(real[i-1].date), d2=new Date(real[i].date);
+    if((d2-d1)/864e5<=365 && (d2-d1)>=0){ sigs.push({w:W.flip,tk:"s_flip_t",pk:"s_flip_p",ex:`${real[i-1].deed} (${real[i-1].date}) → ${real[i].deed} (${real[i].date})`,ck:"c_flip",cls:"warn"}); break; }
+  }
+  if(p.flags.case) sigs.push({w:W.kase,tk:"s_case_t",pk:"s_case_p",ex:"",ck:"c_case",cls:"warn"});
+  if(p.flags.khas) sigs.push({w:W.khas,tk:"s_khas_t",pk:"s_khas_p",ex:"",ck:"c_khas",cls:"bad"});
+  if(p.flags.acq) sigs.push({w:W.acq,tk:"s_acq_t",pk:"s_acq_p",ex:"",ck:"c_acq",cls:"warn"});
+  const score=Math.min(100, sigs.reduce((a,s)=>a+s.w,0));
+  const tier = score>=90?"crit":score>=60?"high":score>=30?"med":"low";
+  return {sigs, score, tier};
+}
+/* ============ SEARCH ============ */
+function doSearch(silent){
+  const inp=document.getElementById("q");
+  const q=(silent?LAST_Q:inp.value).trim().toLowerCase();
+  LAST_Q=q;
+  const box=document.getElementById("resultsBlock"), grid=document.getElementById("results");
+  if(!q){ box.style.display="none"; return; }
+  const hits=PLOTS.filter(p=>{
+    const hay=[p.id,p.dag,p.khatian,p.owner,p.mouza,p.upazila,p.district,p.type]
+      .concat(p.chain.map(c=>c.kh)).concat(p.docs.map(d=>d.ref)).join(" ").toLowerCase();
+    return q.split(/\s+/).every(tok=>hay.includes(tok));
+  });
+  box.style.display="block";
+  grid.innerHTML = hits.length ? hits.map(p=>{
+    const a=assess(p);
+    return `<div class="plot" onclick="openPlot('${p.id}')">
+      <div class="pid">${p.id}</div><h3>${t("d_mouza")}: ${esc(p.mouza)} · ${t("d_dag")} ${esc(p.dag)}</h3>
+      <div class="meta">${esc(p.district)}, ${esc(p.upazila)} · ${t("d_khatian")} ${esc(p.khatian)} · <span class="num">${p.area}</span> ${t("d_dec")}</div>
+      <div class="foot"><span class="note">${esc(p.owner)}</span><span class="tier ${TIER_CLS[a.tier]}">${a.score}</span></div>
+    </div>`;
+  }).join("") : `<p class="note">${t("nores")}</p>`;
+  box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+/* ============ DOSSIER ============ */
+function goHome(){ document.getElementById("view-home").classList.remove("hidden"); document.getElementById("view-dossier").classList.add("hidden"); window.scrollTo({top:0,behavior:"smooth"}); }
+function openPlot(id){ const p=PLOTS.find(x=>x.id===id); if(!p) return; LAST_PLOT=p; renderDossier(p);
+  document.getElementById("view-home").classList.add("hidden"); document.getElementById("view-dossier").classList.remove("hidden"); window.scrollTo({top:0}); }
+function dialSVG(score,tier){
+  const C=2*Math.PI*54, off=C*(1-score/100), col=TIER_COL[tier];
+  return `<div class="dial"><svg width="130" height="130" viewBox="0 0 130 130">
+    <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="12"/>
+    <circle cx="65" cy="65" r="54" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
+    <div class="dv"><b class="num">${score}</b><span>/ 100</span></div></div>`;
+}
+function renderDossier(p){
+  const a=assess(p);
+  const sigCards = a.sigs.length ? a.sigs.map(s=>`
+    <div class="sig ${s.cls}"><span class="w num">+${s.w}</span><h4>${t(s.tk)}</h4><p>${t(s.pk)}${s.ex?`<br><span class="hash">${esc(s.ex)}</span>`:""}</p></div>`).join("")
+    : `<p class="note">${t("d_low")}</p>`;
+  const chain = p.chain.map((c,i)=>{
+    const brk = p.chainBreak && i===p.chain.length-1;
+    return `<div class="clink${brk?" brk":""}"><div class="sv">${c.s} · ${c.yr}</div><h4>${esc(c.owner)}</h4><div class="kh">${t("d_khatian")}: ${esc(c.kh)}</div></div>`;
+  }).join("");
+  const mutRows = p.sales.length ? p.sales.map(s=>`<tr><td class="num">${esc(s.date)}</td><td>${esc(s.type||"Sale")}</td><td>${esc(s.seller)}</td><td>${esc(s.buyer)}</td><td>${esc(s.deed)}</td>
+    <td>${s.reg?`<span class="pill ${s.mut?"p-ok":"p-warn"}">${s.mut?t("st_done"):t("st_pend")}</span>`:`<span class="pill p-info">Record</span>`}</td></tr>`).join("")
+    : `<tr><td colspan="6" class="note">—</td></tr>`;
+  const docRows = p.docs.map(d=>`<tr><td>${esc(d.type)}</td><td>${esc(d.ref)}</td><td><span class="hash">${esc(d.hash.length>26?d.hash.slice(0,26)+"…":d.hash)}</span></td>
+    <td><span class="pill ${d.ok?"p-ok":"p-bad"}">${d.ok?t("v_ok"):t("v_bad")}</span>${d.type==="Deed"?` <a href="#" onclick="prefillVerify('${d.ref}');return false" style="font-size:.78rem;font-weight:700;color:var(--em)">${t("verify_this")} →</a>`:""}</td></tr>`).join("");
+  const checks = a.sigs.length ? a.sigs.map(s=>`<li>${t(s.ck)}</li>`).join("") : `<li>${t("c_none")}</li>`;
+  document.getElementById("dossier").innerHTML = `
+    <div class="dossier-head">
+      <div class="card plotid"><div class="pid" style="font-size:.75rem;font-weight:800;color:var(--muted);letter-spacing:1px">${p.id} · <span class="tier ${TIER_CLS[a.tier]}">${a.tier.toUpperCase()} ${a.score}</span></div>
+        <h2 style="margin-top:6px">${esc(p.mouza)} · ${t("d_dag")} ${esc(p.dag)}</h2>
+        <dl class="kv">
+          <dt>${t("d_district")}</dt><dd>${esc(p.district)}</dd>
+          <dt>${t("d_upazila")}</dt><dd>${esc(p.upazila)}</dd>
+          <dt>${t("d_mouza")}</dt><dd>${esc(p.mouza)}</dd>
+          <dt>${t("d_dag")}</dt><dd class="num">${esc(p.dag)}</dd>
+          <dt>${t("d_khatian")}</dt><dd>${esc(p.khatian)}</dd>
+          <dt>${t("d_area")}</dt><dd class="num">${p.area} ${t("d_dec")}</dd>
+          <dt>${t("d_type")}</dt><dd>${esc(p.type)}</dd>
+          <dt>${t("d_owner")}</dt><dd>${esc(p.owner)}</dd>
+        </dl></div>
+      <div class="riskcard">${dialSVG(a.score,a.tier)}
+        <div class="rt"><b>${t("d_risk")}</b><p>${t(TIER_TXT[a.tier])}</p>
+        <p style="margin-top:10px"><span class="tier ${TIER_CLS[a.tier]}">${a.sigs.length} signal${a.sigs.length===1?"":"s"}</span></p></div></div>
+    </div>
+    <div class="card"><h2>${t("d_risk")}</h2><div class="sig-grid">${sigCards}</div></div>
+    <div class="card mt"><h2>${t("d_chain")}</h2><div class="chain">${chain}</div></div>
+    <div class="card mt"><h2>${t("d_mut")}</h2>
+      <table class="tbl"><tr><th>${t("col_date")}</th><th>${t("col_type")}</th><th>${t("col_from")}</th><th>${t("col_to")}</th><th>${t("col_deed")}</th><th>${t("col_status")}</th></tr>${mutRows}</table></div>
+    <div class="card mt"><h2>${t("d_docs")}</h2>
+      <table class="tbl"><tr><th>${t("col_doc")}</th><th>${t("col_ref")}</th><th>${t("col_hash")}</th><th>${t("col_v")}</th></tr>${docRows}</table></div>
+    <div class="card mt"><h2>${t("d_flags")}</h2><ul class="check">${checks}</ul>
+      <div class="disclaimer" style="margin-top:16px">${t("disc")}</div></div>`;
+}
+/* ============ DEED VERIFIER ============ */
+function prefillVerify(ref){ goHome(); document.getElementById("v-deed").value=ref;
+  const rec=DEED_INDEX[ref]; if(rec) document.getElementById("v-hash").value=rec.hash;
+  setTimeout(()=>document.getElementById("verifier").scrollIntoView({behavior:"smooth"}),80); }
+function tamperDemo(){ const d=document.getElementById("v-deed"); if(!d.value) d.value="DL-2024-11802";
+  const rec=DEED_INDEX[d.value.trim()]; if(!rec) return;
+  const h=rec.hash, last=h[h.length-1];
+  document.getElementById("v-hash").value = h.slice(0,-1)+(last==="a"?"b":"a");
+  verifyDeed(); }
+function verifyDeed(){
+  const deed=document.getElementById("v-deed").value.trim(), hash=document.getElementById("v-hash").value.trim().toLowerCase();
+  const box=document.getElementById("verdict"), rec=DEED_INDEX[deed];
+  box.classList.add("show");
+  if(!rec){ box.className="verdict show no"; box.innerHTML=`<b>${t("ver_nf")}</b>`; return; }
+  const match = rec.hash.toLowerCase()===hash;
+  box.className="verdict show "+(match?"ok":"no");
+  box.innerHTML = match
+    ? `<b>${t("ver_ok_t")}</b><p style="margin-top:6px">${t("ver_ok_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)} · ${t("col_hash")}: <span class="hash">${esc(rec.hash)}</span></span></p>`
+    : `<b>${t("ver_no_t")}</b><p style="margin-top:6px">${t("ver_no_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)}<br>${t("ver_hash")} (registry): <span class="hash">${esc(rec.hash)}</span></span></p>`;
+}
+/* ============ INIT ============ */
+document.getElementById("st-plots").textContent = PLOTS.length;
+setLang(LANG);
+</script>
+</body>
+</html>
