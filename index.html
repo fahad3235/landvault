@@ -72,6 +72,9 @@ section.block{margin:30px 0}
 .t-med{background:var(--amber-soft);color:var(--amber)}
 .t-high{background:#FDEBD8;color:#A34A00}
 .t-crit{background:var(--red-soft);color:var(--red)}
+.tierchip{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;padding:7px 13px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:#fff;transition:.15s}
+.tierchip:hover{border-color:var(--em);transform:translateY(-1px)}
+.tierchip.on{border-color:var(--em);background:var(--em-soft);box-shadow:var(--shadow)}
 /* dossier */
 .dossier-head{display:flex;gap:18px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
 .plotid{flex:1.4;min-width:280px}
@@ -514,6 +517,7 @@ function doSearch(silent){
   const inp=document.getElementById("q");
   const q=(silent?LAST_Q:inp.value).trim().toLowerCase();
   LAST_Q=q;
+  if(!silent&&TIER_FILTER){TIER_FILTER=null;renderOverview();}
   const box=document.getElementById("resultsBlock"), grid=document.getElementById("results");
   if(!q){ box.style.display="none"; return; }
   const hits=PLOTS.filter(p=>{
@@ -524,14 +528,7 @@ function doSearch(silent){
   box.style.display="block";
   const shown=hits.slice(0,24);
   document.querySelector("#resultsBlock .sub").textContent=t("res_count").replace("{a}",shown.length).replace("{b}",hits.length);
-  grid.innerHTML = hits.length ? shown.map(p=>{
-    const a=assess(p);
-    return `<div class="plot" onclick="openPlot('${p.id}')">
-      <div class="pid">${p.id}</div><h3>${t("d_mouza")}: ${esc(p.mouza)} · ${t("d_dag")} ${esc(p.dag)}</h3>
-      <div class="meta">${esc(p.district)}, ${esc(p.upazila)} · ${t("d_khatian")} ${esc(p.khatian)} · <span class="num">${p.area}</span> ${t("d_dec")}</div>
-      <div class="foot"><span class="note">${esc(p.owner)}</span><span class="tier ${TIER_CLS[a.tier]}">${a.score}</span></div>
-    </div>`;
-  }).join("") : `<p class="note">${t("nores")}</p>`;
+  grid.innerHTML = hits.length ? shown.map(plotCard).join("") : `<p class="note">${t("nores")}</p>`;
   box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 /* ============ DOSSIER ============ */
@@ -608,19 +605,41 @@ function verifyDeed(){
     : `<b>${t("ver_no_t")}</b><p style="margin-top:6px">${t("ver_no_p")}<br><span class="note">${t("col_deed")}: ${esc(deed)}<br>${t("ver_hash")} (registry): <span class="hash">${esc(rec.hash)}</span></span></p>`;
 }
 /* ============ REGISTRY OVERVIEW ============ */
-Object.assign(I18N.en,{res_count:"Showing {a} of {b} matching plots — click any plot to open its dossier.",ov_h:"Registry overview",ov_p:"Risk distribution across the full synthetic registry",ov_low:"Low",ov_med:"Medium",ov_high:"High",ov_crit:"Critical",ov_total:"total plots"});
-Object.assign(I18N.bn,{res_count:"{b}টি মিলে যাওয়া প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",ov_h:"রেজিস্ট্রি সারসংক্ষেপ",ov_p:"সম্পূর্ণ সিনথেটিক রেজিস্ট্রিতে ঝুঁকির বিন্যাস",ov_low:"কম",ov_med:"মাঝারি",ov_high:"উচ্চ",ov_crit:"গুরুতর",ov_total:"মোট প্লট"});
+Object.assign(I18N.en,{res_count:"Showing {a} of {b} matching plots — click any plot to open its dossier.",tier_count:"Showing {a} of {b} {t}-risk plots — click any plot to open its dossier.",ov_h:"Registry overview",ov_p:"Risk distribution across the full synthetic registry — tap a tier to inspect its plots",ov_low:"Low",ov_med:"Medium",ov_high:"High",ov_crit:"Critical",ov_total:"total plots"});
+Object.assign(I18N.bn,{res_count:"{b}টি মিলে যাওয়া প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",tier_count:"{t} ঝুঁকির {b}টি প্লটের মধ্যে {a}টি দেখানো হচ্ছে — ডসিয়ার খুলতে ক্লিক করুন।",ov_h:"রেজিস্ট্রি সারসংক্ষেপ",ov_p:"সম্পূর্ণ সিনথেটিক রেজিস্ট্রিতে ঝুঁকির বিন্যাস — প্লট দেখতে যেকোনো স্তরে ট্যাপ করুন",ov_low:"কম",ov_med:"মাঝারি",ov_high:"উচ্চ",ov_crit:"গুরুতর",ov_total:"মোট প্লট"});
+let TIER_FILTER=null;
+function plotCard(p){
+  const a=assess(p);
+  return `<div class="plot" onclick="openPlot('${p.id}')">
+    <div class="pid">${p.id}</div><h3>${t("d_mouza")}: ${esc(p.mouza)} · ${t("d_dag")} ${esc(p.dag)}</h3>
+    <div class="meta">${esc(p.district)}, ${esc(p.upazila)} · ${t("d_khatian")} ${esc(p.khatian)} · <span class="num">${p.area}</span> ${t("d_dec")}</div>
+    <div class="foot"><span class="note">${esc(p.owner)}</span><span class="tier ${TIER_CLS[a.tier]}">${a.score}</span></div>
+  </div>`;
+}
 function renderOverview(){
   const counts={low:0,med:0,high:0,crit:0};
   for(let i=0;i<PLOTS.length;i++) counts[assess(PLOTS[i]).tier]++;
   const total=PLOTS.length;
   const cols={low:"#2FA36B",med:"#E0A020",high:"#E06A1B",crit:"#E0483A"};
   const bar=["low","med","high","crit"].map(k=>{const pc=(counts[k]/total*100);return pc>0?'<span title="'+k+": "+counts[k]+'" style="display:block;height:100%;width:'+pc.toFixed(1)+"%;background:"+cols[k]+'"></span>':"";}).join("");
-  const chips=["low","med","high","crit"].map(k=>'<span style="font-size:.85rem"><span class="tier '+TIER_CLS[k]+'">'+t("ov_"+k)+'</span> <b class="num">'+counts[k]+"</b></span>").join("");
-  const html='<section class="block"><div class="card"><h2>'+t("ov_h")+'</h2><p class="sub">'+t("ov_p")+' · <b class="num">'+total+"</b> "+t("ov_total")+'</p><div style="display:flex;height:16px;border-radius:999px;overflow:hidden;background:#EDF1EC">'+bar+'</div><div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px">'+chips+"</div></div></section>";
+  const chips=["low","med","high","crit"].map(k=>'<span class="tierchip'+(TIER_FILTER===k?" on":"")+'" onclick="filterTier(\''+k+'\')"><span class="tier '+TIER_CLS[k]+'">'+t("ov_"+k)+'</span> <b class="num">'+counts[k]+"</b></span>").join("");
+  const html='<section class="block"><div class="card"><h2>'+t("ov_h")+'</h2><p class="sub">'+t("ov_p")+' · <b class="num">'+total+"</b> "+t("ov_total")+'</p><div style="display:flex;height:16px;border-radius:999px;overflow:hidden;background:#EDF1EC">'+bar+'</div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">'+chips+"</div></div></section>";
+  const fixed=html.replace('<div class="card">','<div class="card" id="ovCard">');
   const old=document.getElementById("ovCard");
-  if(old){ old.outerHTML=html.replace('<div class="card">','<div class="card" id="ovCard">'); }
-  else { document.querySelector(".hero").insertAdjacentHTML("afterend", html.replace('<div class="card">','<div class="card" id="ovCard">')); }
+  if(old){ old.outerHTML=fixed; }
+  else { document.querySelector(".hero").insertAdjacentHTML("afterend", fixed); }
+}
+function filterTier(k){
+  TIER_FILTER=(TIER_FILTER===k)?null:k;
+  renderOverview();
+  const box=document.getElementById("resultsBlock"), grid=document.getElementById("results");
+  if(!TIER_FILTER){ box.style.display="none"; return; }
+  const hits=PLOTS.filter(p=>assess(p).tier===TIER_FILTER);
+  const shown=hits.slice(0,24);
+  box.style.display="block";
+  document.querySelector("#resultsBlock .sub").textContent=t("tier_count").replace("{a}",shown.length).replace("{b}",hits.length).replace("{t}",t("ov_"+TIER_FILTER));
+  grid.innerHTML=hits.length?shown.map(plotCard).join(""):`<p class="note">${t("nores")}</p>`;
+  box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 const _setLang=setLang;
 setLang=function(l){ _setLang(l); renderOverview(); };
