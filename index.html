@@ -191,7 +191,7 @@ footer.site .wrap{display:flex;gap:18px;flex-wrap:wrap;justify-content:space-bet
       <h1 data-i18n="hero_h">Before you buy land, <span class="hl">verify it.</span></h1>
       <p data-i18n="hero_p">LandVault pulls the ownership chain, mutation history and registered documents of any plot into one verified dossier — and flags forgery, double-selling and record mismatches before your money moves.</p>
       <div class="searchbar">
-        <input id="q" data-i18n-ph="search_ph" placeholder="Search by dag, khatian, mouza, owner or plot ID…  e.g. 142" onkeydown="if(event.key==='Enter')doSearch()">
+        <input id="q" data-i18n-ph="search_ph" placeholder="Search by dag, khatian, mouza, owner or plot ID…  e.g. 142" onkeydown="if(event.key==='Enter')doSearch()" oninput="liveSearch()">
         <button onclick="doSearch()" data-i18n="search_btn">Verify Plot</button>
       </div>
       <div class="scen">
@@ -513,11 +513,12 @@ function assess(p){
   return {sigs, score, tier};
 }
 /* ============ SEARCH ============ */
-function doSearch(silent){
+function doSearch(silent, noscroll){
   const inp=document.getElementById("q");
-  const q=(silent?LAST_Q:inp.value).trim().toLowerCase();
+  if(silent) inp.value=LAST_Q;
+  const q=inp.value.trim().toLowerCase();
   LAST_Q=q;
-  if(!silent&&TIER_FILTER){TIER_FILTER=null;renderOverview();}
+  if(TIER_FILTER){TIER_FILTER=null;renderOverview();}
   const box=document.getElementById("resultsBlock"), grid=document.getElementById("results"),
         sub=document.querySelector("#resultsBlock .sub");
   BROWSE_MODE=!q;
@@ -526,7 +527,7 @@ function doSearch(silent){
     const shown=PLOTS.slice(0,24);
     sub.textContent=t("browse_count").replace("{a}",shown.length).replace("{b}",PLOTS.length);
     grid.innerHTML=shown.map(plotCard).join("");
-    box.scrollIntoView({behavior:"smooth",block:"nearest"});
+    if(!noscroll) box.scrollIntoView({behavior:"smooth",block:"nearest"});
     return;
   }
   const hits=PLOTS.filter(p=>{
@@ -537,7 +538,15 @@ function doSearch(silent){
   const shown=hits.slice(0,24);
   sub.textContent=t("res_count").replace("{a}",shown.length).replace("{b}",hits.length);
   grid.innerHTML = hits.length ? shown.map(plotCard).join("") : `<p class="note">${t("nores")}</p>`;
-  box.scrollIntoView({behavior:"smooth",block:"nearest"});
+  if(!noscroll) box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function liveSearch(){
+  clearTimeout(window._lst);
+  window._lst=setTimeout(()=>{
+    const v=document.getElementById("q").value.trim();
+    if(v){ doSearch(false,true); }
+    else { document.getElementById("resultsBlock").style.display="none"; BROWSE_MODE=false; LAST_Q=""; }
+  },280);
 }
 /* ============ DOSSIER ============ */
 function goHome(){ document.getElementById("view-home").classList.remove("hidden"); document.getElementById("view-dossier").classList.add("hidden"); window.scrollTo({top:0,behavior:"smooth"}); }
